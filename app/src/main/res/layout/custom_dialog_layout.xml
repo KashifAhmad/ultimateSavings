@@ -5,13 +5,13 @@
     android:layout_height="249dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_constraintDimensionRatio="w,1:1"
-    android:padding="@dimen/text_size">
+    android:padding="12sp">
 
     <ImageView
         android:id="@+id/iv_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/whiteColor"
+        android:backgroundTint="#ffffff"
         android:layout_centerHorizontal="true"
         android:src="@drawable/progress_animation" />
 
@@ -22,6 +22,5 @@
         android:layout_below="@id/iv_progress"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Dialog Text"
-        android:textColor="@color/mainAppColor" />
+        android:text="Dialog Text"/>
 </RelativeLayout>

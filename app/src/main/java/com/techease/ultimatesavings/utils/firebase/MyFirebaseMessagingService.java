@@ -11,8 +11,8 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.techease.dealmachine.R;
-import com.techease.dealmachine.view.activities.MainDrawerActivity;
+import com.techease.ultimatesavings.MainActivity;
+import com.techease.ultimatesavings.R;
 
 /**
  * Created by Asus on 10/12/2017.
@@ -33,7 +33,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.d("msg", "onMessageReceived: " + remoteMessage.getData().get("message"));
-        Intent intent = new Intent(this, MainDrawerActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String channelId = "Default";
@@ -49,5 +49,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         manager.notify(0, builder.build());
     }
 
-
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        Log.d("zma token", s);
+    }
 }
