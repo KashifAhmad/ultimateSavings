@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">ultimateSavings</string>
+    <string name="app_name">Ultimate Savings</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="font_family_condensed">sans-serif-condensed</string>
 </resources>
