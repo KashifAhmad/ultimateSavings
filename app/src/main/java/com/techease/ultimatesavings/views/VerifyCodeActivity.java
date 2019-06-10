@@ -1,8 +1,9 @@
-package com.techease.ultimatesavings.views.ui;
+package com.techease.ultimatesavings.views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.views.ui.verifycode.VerifyCodeFragment;
 
 public class VerifyCodeActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.techease.ultimatesavings.views.ui;
+package com.techease.ultimatesavings.views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.ui.RegisterWithActivity"></activity>
-        <activity android:name=".views.ui.ResetPasswordActivity" />
-        <activity android:name=".views.ui.VerifyCodeActivity" />
+        <activity android:name=".views.RegisterWithActivity"></activity>
+        <activity android:name=".views.ResetPasswordActivity" />
+        <activity android:name=".views.VerifyCodeActivity" />
         <activity android:name=".views.EmailVerificationActivity" />
         <activity android:name=".views.LoginRegisterSecondActivity" />
         <activity android:name=".views.LoginRegisterActivity" />
