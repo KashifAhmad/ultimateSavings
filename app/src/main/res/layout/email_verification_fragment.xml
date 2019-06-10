@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.techease.ultimatesavings.views.ui.emailverification.EmailVerificationViewModel" />
+    </data>
+<RelativeLayout
     android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -77,6 +83,7 @@
         android:layout_centerInParent="true"
         android:background="@drawable/round_button_purple"
         android:text="Send Code"
+        android:onClick="@{()-> viewModel.onClick()}"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:textSize="17sp" />
@@ -90,3 +97,4 @@
 
     </FrameLayout>
 </RelativeLayout>
+</layout>

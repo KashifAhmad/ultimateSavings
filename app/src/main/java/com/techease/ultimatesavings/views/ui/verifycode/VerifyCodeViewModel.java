@@ -1,7 +1,17 @@
 package com.techease.ultimatesavings.views.ui.verifycode;
 
-import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+import android.content.Intent;
+import android.databinding.BaseObservable;
 
-public class VerifyCodeViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+import com.techease.ultimatesavings.views.LoginActivity;
+
+public class VerifyCodeViewModel extends BaseObservable {
+    Context mContext;
+    public VerifyCodeViewModel(Context context){
+        mContext = context;
+    }
+    public void onVerifyButtonClick(){
+        mContext.startActivity(new Intent(mContext, LoginActivity.class));
+    }
 }

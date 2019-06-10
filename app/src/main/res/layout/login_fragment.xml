@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.techease.ultimatesavings.views.ui.login.LoginViewModel" />
+    </data>
+<RelativeLayout
     android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -141,6 +147,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="30dp"
         android:text="@string/forgot_password"
+        android:onClick="@{()-> viewModel.onForgotClick()}"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -155,6 +162,7 @@
         android:layout_marginTop="70dp"
         android:background="@drawable/round_button_purple"
         android:text="@string/login"
+        android:onClick="@{()-> viewModel.onLoginClick()}"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:textSize="17sp" />
@@ -179,6 +187,7 @@
             android:layout_marginStart="20dp"
             android:text="@string/register"
             android:textColor="@color/colorPrimary"
+            android:onClick="@{()-> viewModel.onRegisterButtonClick()}"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -226,3 +235,4 @@
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>
+</layout>

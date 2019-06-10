@@ -1,328 +1,332 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/text_content_margin"
-    tools:context=".views.LoginActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.techease.ultimatesavings.views.ui.signup.SignUpViewModel" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="50dp"
-        android:text="@string/register"
-        android:textColor="@color/colorPrimary"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+    </data>
 
-    <LinearLayout
-        android:id="@+id/ll_name"
+    <RelativeLayout
+        android:id="@+id/login"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/textView3"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="@dimen/screen_padding"
-            android:src="@mipmap/profile"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="215dp" />
-
-        <EditText
-            android:id="@+id/et_first_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:autofillHints="@string/first_name"
-            android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/first_name"
-            android:inputType="text"
-            android:paddingStart="20dp"
-            tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="200dp" />
-
-        <EditText
-            android:id="@+id/et_last_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:autofillHints="@string/last_name"
-            android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/last_name"
-            android:inputType="text"
-            android:paddingStart="20dp"
-            tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="200dp" />
-
-
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_below="@id/ll_name"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/light_gray"
-
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="243dp" />
-
-
-    <LinearLayout
-        android:id="@+id/ll_bd"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/view1"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="@dimen/screen_padding"
-            android:src="@mipmap/birthday"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="215dp" />
-
-        <EditText
-            android:id="@+id/et_birthday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints="@string/birthday"
-            android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/birthday"
-            android:inputType="date"
-            android:paddingStart="20dp"
-            tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="200dp" />
-
-
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_below="@id/ll_bd"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/light_gray"
-
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="243dp" />
-
-
-    <LinearLayout
-        android:id="@+id/ll_phone"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/view2"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="@dimen/screen_padding"
-            android:src="@mipmap/mobile"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="215dp" />
-
-        <EditText
-            android:id="@+id/et_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints="@string/mobile_number"
-            android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/mobile_number"
-            android:inputType="phone"
-            android:paddingStart="20dp"
-            tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="200dp" />
-
-
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/view02"
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_below="@id/ll_phone"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/light_gray"
-
-        tools:ignore="MissingConstraints" />
-
-
-    <LinearLayout
-        android:id="@+id/ll_email"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/view02"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="@dimen/screen_padding"
-            android:src="@mipmap/email"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="215dp" />
-
-        <EditText
-            android:id="@+id/et_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints="@string/email"
-            android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:paddingStart="20dp"
-            tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="200dp" />
-
-
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/view3"
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_below="@id/ll_email"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/light_gray"
-
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="243dp" />
-
-
-    <LinearLayout
-        android:id="@+id/ll_password"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/view3"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="@dimen/text_content_margin"
-            android:src="@mipmap/password"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="283dp" />
-
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints="@string/password"
-            android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingStart="20dp"
-            tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="10dp"
-            tools:layout_editor_absoluteY="269dp" />
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/view4"
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_below="@id/ll_password"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/light_gray"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="314dp" />
-
-
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_password"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/round_button_purple"
-        android:text="@string/register"
-        android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        android:textSize="17sp" />
-
-    <LinearLayout
-        android:id="@+id/ll_new_here"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_login"
-        android:layout_marginTop="15dp"
-        android:gravity="center_horizontal">
+        android:layout_height="match_parent"
+        android:padding="@dimen/text_content_margin">
 
         <TextView
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/already_here" />
-
-        <TextView
-            android:id="@+id/tv_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@string/login"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="50dp"
+            android:text="@string/register"
             android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
+            android:textSize="30sp"
             android:textStyle="bold" />
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_name"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/textView3"
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="@dimen/screen_padding"
+                android:src="@mipmap/profile" />
+
+            <EditText
+                android:id="@+id/et_first_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:autofillHints="@string/first_name"
+                android:backgroundTint="@color/colorLightWhite"
+                android:hint="@string/first_name"
+                android:inputType="text"
+                android:paddingStart="20dp" />
+
+            <EditText
+                android:id="@+id/et_last_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:autofillHints="@string/last_name"
+                android:backgroundTint="@color/colorLightWhite"
+                android:hint="@string/last_name"
+                android:inputType="text"
+                android:paddingStart="20dp"
+                tools:ignore="MissingConstraints,RtlSymmetry"
+                tools:layout_editor_absoluteX="3dp"
+                tools:layout_editor_absoluteY="200dp" />
 
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_new_here"
-        android:background="@mipmap/illustration1">
+        </LinearLayout>
 
 
-    </FrameLayout>
-</RelativeLayout>
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_below="@id/ll_name"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/light_gray"
+
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="9dp"
+            tools:layout_editor_absoluteY="243dp" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_bd"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/view1"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="@dimen/screen_padding"
+                android:src="@mipmap/birthday"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="215dp" />
+
+            <EditText
+                android:id="@+id/et_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints="@string/birthday"
+                android:backgroundTint="@color/colorLightWhite"
+                android:hint="@string/birthday"
+                android:inputType="date"
+                android:paddingStart="20dp"
+                tools:ignore="MissingConstraints,RtlSymmetry"
+                tools:layout_editor_absoluteX="3dp"
+                tools:layout_editor_absoluteY="200dp" />
+
+
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_below="@id/ll_bd"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/light_gray"
+
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="9dp"
+            tools:layout_editor_absoluteY="243dp" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_phone"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/view2"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="@dimen/screen_padding"
+                android:src="@mipmap/mobile"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="215dp" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints="@string/mobile_number"
+                android:backgroundTint="@color/colorLightWhite"
+                android:hint="@string/mobile_number"
+                android:inputType="phone"
+                android:paddingStart="20dp"
+                tools:ignore="MissingConstraints,RtlSymmetry"
+                tools:layout_editor_absoluteX="3dp"
+                tools:layout_editor_absoluteY="200dp" />
+
+
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/view02"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_below="@id/ll_phone"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/light_gray"
+
+            tools:ignore="MissingConstraints" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_email"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/view02"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="@dimen/screen_padding"
+                android:src="@mipmap/email"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="215dp" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints="@string/email"
+                android:backgroundTint="@color/colorLightWhite"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:paddingStart="20dp"
+                tools:ignore="MissingConstraints,RtlSymmetry"
+                tools:layout_editor_absoluteX="3dp"
+                tools:layout_editor_absoluteY="200dp" />
+
+
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_below="@id/ll_email"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/light_gray"
+
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="9dp"
+            tools:layout_editor_absoluteY="243dp" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_password"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/view3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="@dimen/text_content_margin"
+                android:src="@mipmap/password"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="283dp" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints="@string/password"
+                android:backgroundTint="@color/colorLightWhite"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:paddingStart="20dp"
+                tools:ignore="MissingConstraints,RtlSymmetry"
+                tools:layout_editor_absoluteX="10dp"
+                tools:layout_editor_absoluteY="269dp" />
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_below="@id/ll_password"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/light_gray"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="10dp"
+            tools:layout_editor_absoluteY="314dp" />
+
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_password"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/round_button_purple"
+            android:onClick="@{()-> viewModel.onRegisterButtonClick()}"
+            android:text="@string/register"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:id="@+id/ll_new_here"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_register"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/already_here" />
+
+            <TextView
+                android:id="@+id/tv_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/login"
+                android:onClick="@{()->viewModel.onLoginClick()}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_new_here"
+            android:background="@mipmap/illustration1">
+
+
+        </FrameLayout>
+    </RelativeLayout>
+</layout>

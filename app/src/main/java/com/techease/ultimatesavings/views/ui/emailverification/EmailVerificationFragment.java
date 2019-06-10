@@ -1,6 +1,7 @@
 package com.techease.ultimatesavings.views.ui.emailverification;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techease.ultimatesavings.R;
+import com.techease.ultimatesavings.databinding.EmailVerificationFragmentBinding;
 
 
 public class EmailVerificationFragment extends Fragment {
@@ -30,7 +32,9 @@ public class EmailVerificationFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(EmailVerificationViewModel.class);
+        EmailVerificationFragmentBinding fragmentBinding = DataBindingUtil.setContentView(getActivity(), R.layout.email_verification_fragment);
+        fragmentBinding.setViewModel(new EmailVerificationViewModel(getActivity()));
+        fragmentBinding.executePendingBindings();
         // TODO: Use the ViewModel
     }
 
