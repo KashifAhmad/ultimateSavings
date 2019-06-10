@@ -13,7 +13,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
         getSupportActionBar().hide();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 } else {
-                    startActivity(new Intent(SplashActivity.this, SignUpActivity.class));
+                    startActivity(new Intent(SplashActivity.this, LoginRegisterActivity.class));
                     finish();
                 }
 

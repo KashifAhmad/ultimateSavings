@@ -13,81 +13,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="50dp"
-        android:text="@string/register"
+        android:text="@string/login"
         android:textColor="@color/colorPrimary"
         android:textSize="30sp"
         android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/ll_name"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/textView3"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="@dimen/screen_padding"
-            android:src="@mipmap/profile"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="215dp" />
-
-        <EditText
-            android:id="@+id/et_first_name"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints="@string/first_name"
-            android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/first_name"
-            android:inputType="textEmailAddress"
-            android:paddingStart="20dp"
-            tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="200dp" />
-        <EditText
-            android:id="@+id/et_last_name"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints="@string/email"
-            android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:paddingStart="20dp"
-            tools:ignore="MissingConstraints,RtlSymmetry"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="200dp" />
-
-
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_below="@id/ll_name"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@color/light_gray"
-
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="243dp" />
-
-
-    <LinearLayout
         android:id="@+id/ll_email"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@id/ll_name"
+        android:layout_below="@id/textView3"
         android:layout_marginTop="40dp"
         android:orientation="horizontal">
 

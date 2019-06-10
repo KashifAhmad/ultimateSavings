@@ -2,4 +2,21 @@
     <string name="app_name">Ultimate Savings</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="font_family_condensed">sans-serif-condensed</string>
+    <string name="lorem">Lorem ipsum dolor sit</string>
+
+    <string name="lorem_detail">Lorem ipsum dolor sit Lorem ipsum dolor sit Lorem ipsum dolor sit Lorem ipsum dolor sit Lorem ipsum dolor sit</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="next">Next</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="new_here">New Here ?</string>
+    <string name="sign_in_with">Sign in with</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="birthday">Birthday</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="already_here">Already Here ?</string>
 </resources>
