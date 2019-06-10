@@ -19,4 +19,14 @@
     <string name="birthday">Birthday</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="already_here">Already Here ?</string>
+    <string name="you_ll">You\'ll shortly receive an email with a code, Write code to verify.</string>
+    <string name="resend">Resend Confirmation Code in (1:08)</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="reset">Reset</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="title_activity_register_with">RegisterWithActivity</string>
+    <string name="register_with">Register with</string>
+    <string name="or">Or</string>
+    <string name="email_id">Email ID</string>
 </resources>

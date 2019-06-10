@@ -39,27 +39,28 @@
         <EditText
             android:id="@+id/et_first_name"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:autofillHints="First Name"
+            android:layout_weight="1"
+            android:autofillHints="@string/first_name"
             android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
+            android:hint="@string/first_name"
+            android:inputType="text"
             android:paddingStart="20dp"
             tools:ignore="MissingConstraints,RtlSymmetry"
             tools:layout_editor_absoluteX="3dp"
             tools:layout_editor_absoluteY="200dp" />
+
         <EditText
             android:id="@+id/et_last_name"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:autofillHints="@string/email"
+            android:layout_weight="1"
+            android:autofillHints="@string/last_name"
             android:backgroundTint="@color/colorLightWhite"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
+            android:hint="@string/last_name"
+            android:inputType="text"
             android:paddingStart="20dp"
             tools:ignore="MissingConstraints,RtlSymmetry"
             tools:layout_editor_absoluteX="3dp"
@@ -84,11 +85,109 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_bd"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/view1"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="@dimen/screen_padding"
+            android:src="@mipmap/birthday"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="215dp" />
+
+        <EditText
+            android:id="@+id/et_birthday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:autofillHints="@string/birthday"
+            android:backgroundTint="@color/colorLightWhite"
+            android:hint="@string/birthday"
+            android:inputType="date"
+            android:paddingStart="20dp"
+            tools:ignore="MissingConstraints,RtlSymmetry"
+            tools:layout_editor_absoluteX="3dp"
+            tools:layout_editor_absoluteY="200dp" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_below="@id/ll_bd"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/light_gray"
+
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="243dp" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_phone"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/view2"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="@dimen/screen_padding"
+            android:src="@mipmap/mobile"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="215dp" />
+
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:autofillHints="@string/mobile_number"
+            android:backgroundTint="@color/colorLightWhite"
+            android:hint="@string/mobile_number"
+            android:inputType="phone"
+            android:paddingStart="20dp"
+            tools:ignore="MissingConstraints,RtlSymmetry"
+            tools:layout_editor_absoluteX="3dp"
+            tools:layout_editor_absoluteY="200dp" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view02"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_below="@id/ll_phone"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/light_gray"
+
+        tools:ignore="MissingConstraints" />
+
+
+    <LinearLayout
         android:id="@+id/ll_email"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@id/ll_name"
-        android:layout_marginTop="40dp"
+        android:layout_below="@id/view02"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -120,7 +219,7 @@
 
 
     <View
-        android:id="@+id/view4"
+        android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
         android:layout_below="@id/ll_email"
@@ -137,7 +236,7 @@
         android:id="@+id/ll_password"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@id/view4"
+        android:layout_below="@id/view3"
         android:orientation="horizontal">
 
         <ImageView
@@ -167,7 +266,7 @@
 
 
     <View
-        android:id="@+id/view2"
+        android:id="@+id/view4"
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
         android:layout_below="@id/ll_password"
@@ -178,48 +277,17 @@
         tools:layout_editor_absoluteX="10dp"
         tools:layout_editor_absoluteY="314dp" />
 
-    <LinearLayout
-        android:id="@+id/ll_remember"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/view2"
-        android:layout_marginTop="10dp"
-        android:paddingStart="12.5dp">
-
-        <CheckBox
-            android:id="@+id/cb_remember"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="@string/remember_me" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_remember"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
-        android:text="@string/forgot_password"
-        android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_forgot_password"
+        android:layout_below="@id/ll_password"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="70dp"
         android:background="@drawable/round_button_purple"
-        android:text="@string/login"
+        android:text="@string/register"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:textSize="17sp" />
@@ -235,59 +303,26 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/new_here" />
+            android:text="@string/already_here" />
 
         <TextView
             android:id="@+id/tv_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="@string/register"
+            android:text="@string/login"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_tv_sign_in_with"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_new_here"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/sign_in_with" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_tv_sign_in_with"
+        android:layout_below="@id/ll_new_here"
         android:background="@mipmap/illustration1">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:src="@mipmap/fb" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:src="@mipmap/google" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:src="@mipmap/twitter" />
-
-        </LinearLayout>
     </FrameLayout>
 </RelativeLayout>
