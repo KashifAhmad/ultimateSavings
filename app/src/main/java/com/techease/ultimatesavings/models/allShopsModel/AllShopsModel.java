@@ -2,51 +2,57 @@
 package com.techease.ultimatesavings.models.allShopsModel;
 
 import java.util.List;
+
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
 @SuppressWarnings("unused")
 public class AllShopsModel {
 
-    @SerializedName("data")
-    private List<Datum> mData;
-    @SerializedName("message")
-    private String mMessage;
-    @SerializedName("status")
-    private Long mStatus;
+
     @SerializedName("success")
-    private Boolean mSuccess;
-
-    public List<Datum> getData() {
-        return mData;
-    }
-
-    public void setData(List<Datum> data) {
-        mData = data;
-    }
-
-    public String getMessage() {
-        return mMessage;
-    }
-
-    public void setMessage(String message) {
-        mMessage = message;
-    }
-
-    public Long getStatus() {
-        return mStatus;
-    }
-
-    public void setStatus(Long status) {
-        mStatus = status;
-    }
+    @Expose
+    private Boolean success;
+    @SerializedName("status")
+    @Expose
+    private Integer status;
+    @SerializedName("message")
+    @Expose
+    private String message;
+    @SerializedName("data")
+    @Expose
+    private List<Datum> data = null;
 
     public Boolean getSuccess() {
-        return mSuccess;
+        return success;
     }
 
     public void setSuccess(Boolean success) {
-        mSuccess = success;
+        this.success = success;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<Datum> getData() {
+        return data;
+    }
+
+    public void setData(List<Datum> data) {
+        this.data = data;
+    }
 }

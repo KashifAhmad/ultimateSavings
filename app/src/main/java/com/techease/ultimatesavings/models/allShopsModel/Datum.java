@@ -1,71 +1,76 @@
 
 package com.techease.ultimatesavings.models.allShopsModel;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
-@SuppressWarnings("unused")
 public class Datum {
 
-    @SerializedName("distance")
-    private String mDistance;
     @SerializedName("id")
-    private String mId;
-    @SerializedName("latitude")
-    private String mLatitude;
-    @SerializedName("longitude")
-    private String mLongitude;
-    @SerializedName("picture")
-    private String mPicture;
+    @Expose
+    private String id;
     @SerializedName("title")
-    private String mTitle;
-
-    public String getDistance() {
-        return mDistance;
-    }
-
-    public void setDistance(String distance) {
-        mDistance = distance;
-    }
+    @Expose
+    private String title;
+    @SerializedName("distance")
+    @Expose
+    private String distance;
+    @SerializedName("latitude")
+    @Expose
+    private String latitude;
+    @SerializedName("longitude")
+    @Expose
+    private String longitude;
+    @SerializedName("picture")
+    @Expose
+    private String picture;
 
     public String getId() {
-        return mId;
+        return id;
     }
 
     public void setId(String id) {
-        mId = id;
-    }
-
-    public String getLatitude() {
-        return mLatitude;
-    }
-
-    public void setLatitude(String latitude) {
-        mLatitude = latitude;
-    }
-
-    public String getLongitude() {
-        return mLongitude;
-    }
-
-    public void setLongitude(String longitude) {
-        mLongitude = longitude;
-    }
-
-    public String getPicture() {
-        return mPicture;
-    }
-
-    public void setPicture(String picture) {
-        mPicture = picture;
+        this.id = id;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String title) {
-        mTitle = title;
+        this.title = title;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
 }

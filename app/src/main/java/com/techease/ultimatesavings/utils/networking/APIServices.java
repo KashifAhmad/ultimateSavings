@@ -45,7 +45,7 @@ public interface APIServices {
     @FormUrlEncoded
     @POST("app/shops")
     Call<AllShopsModel> shops(@Field("lat") String lat,
-                              @Field("lon") String lng);
+                              @Field("lng") String lng);
 
     @FormUrlEncoded
     @POST("app/filterShops")
