@@ -1,12 +1,12 @@
 
-package com.techease.ultimatesavings.models.forgotPasswordModels;
+package com.techease.ultimatesavings.models.verifyEmailModels;
 
 
 import com.google.gson.annotations.SerializedName;
 
 
 @SuppressWarnings("unused")
-public class ForgotPasswordModel {
+public class VerifyEmailModel {
 
     @SerializedName("message")
     private String mMessage;

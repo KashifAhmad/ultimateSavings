@@ -1,27 +1,76 @@
 package com.techease.ultimatesavings.views.ui.login;
 
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.widget.Toast;
 
+import com.techease.ultimatesavings.models.loginModels.LoginModel;
+import com.techease.ultimatesavings.models.loginModels.LoginUserInput;
+import com.techease.ultimatesavings.utils.AppRepository;
+import com.techease.ultimatesavings.utils.DialogBuilder;
+import com.techease.ultimatesavings.utils.networking.BaseNetworking;
 import com.techease.ultimatesavings.views.EmailVerificationActivity;
 import com.techease.ultimatesavings.views.SignUpActivity;
-import com.techease.ultimatesavings.views.SplashActivity;
-import com.techease.ultimatesavings.views.VerifyCodeActivity;
+import com.techease.ultimatesavings.views.ui.StoreMapsActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginViewModel extends BaseObservable {
     Context mContext;
-    public LoginViewModel(Context context){
+    private LoginUserInput inputModel;
+
+    public LoginViewModel(Context context) {
         mContext = context;
+        inputModel = new LoginUserInput("", "");
     }
-    public void onRegisterButtonClick(){
+
+    public void onRegisterButtonClick() {
         mContext.startActivity(new Intent(mContext, SignUpActivity.class));
     }
-    public void onLoginClick(){
-        mContext.startActivity(new Intent(mContext, SplashActivity.class));
+
+    public void onLoginClick() {
+        if (inputModel.isInputDataValid()) {
+            DialogBuilder.dialogBuilder(mContext, "");
+            onLogin();
+        } else {
+            Toast.makeText(mContext, "Input validation failed", Toast.LENGTH_SHORT).show();
+        }
     }
-    public void onForgotClick(){
+
+    public void onForgotClick() {
         mContext.startActivity(new Intent(mContext, EmailVerificationActivity.class));
+    }
+
+    public void afterEmailTextChanged(CharSequence s) {
+        inputModel.setEmail(s.toString());
+    }
+
+    public void afterPasswordTextChanged(CharSequence s) {
+        inputModel.setPassword(s.toString());
+    }
+
+    private void onLogin() {
+        Call<LoginModel> loginModel = BaseNetworking.apiServices().login(inputModel.getEmail(), inputModel.getPassword());
+        loginModel.enqueue(new Callback<LoginModel>() {
+            @Override
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+                DialogBuilder.dialog.dismiss();
+                if (response.body().getSuccess()) {
+                    mContext.startActivity(new Intent(mContext, StoreMapsActivity.class));
+                    AppRepository.mEditor(mContext).putBoolean("loggedIn", true).commit();
+                } else {
+                    Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginModel> call, Throwable t) {
+                DialogBuilder.dialog.dismiss();
+                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

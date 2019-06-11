@@ -1,6 +1,6 @@
-package com.techease.ultimatesavings.views.ui.resetpassword;
+package com.techease.ultimatesavings.views.ui.changePassword;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techease.ultimatesavings.R;
+import com.techease.ultimatesavings.databinding.ResetPasswordFragmentBinding;
 
 public class ResetPasswordFragment extends Fragment {
 
@@ -29,7 +30,9 @@ public class ResetPasswordFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ResetPasswordViewModel.class);
+        ResetPasswordFragmentBinding fragmentBinding = DataBindingUtil.setContentView(getActivity(), R.layout.reset_password_fragment);
+        fragmentBinding.setViewModel(new ResetPasswordViewModel(getActivity()));
+        fragmentBinding.executePendingBindings();
         // TODO: Use the ViewModel
     }
 

@@ -6,11 +6,11 @@
             name="viewModel"
             type="com.techease.ultimatesavings.views.ui.signup.SignUpViewModel" />
 
-    </data>
+        </data>
 
-    <RelativeLayout
-        android:id="@+id/login"
-        android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/login"
+            android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/text_content_margin">
 
@@ -47,6 +47,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:autofillHints="@string/first_name"
+                android:afterTextChanged="@{(editable)->viewModel.afterFNameTextChanged(editable)}"
                 android:backgroundTint="@color/colorLightWhite"
                 android:hint="@string/first_name"
                 android:inputType="text"
@@ -61,6 +62,7 @@
                 android:autofillHints="@string/last_name"
                 android:backgroundTint="@color/colorLightWhite"
                 android:hint="@string/last_name"
+                android:afterTextChanged="@{(editable)->viewModel.afterLNameTextChanged(editable)}"
                 android:inputType="text"
                 android:paddingStart="20dp"
                 tools:ignore="MissingConstraints,RtlSymmetry"
@@ -113,6 +115,7 @@
                 android:hint="@string/birthday"
                 android:inputType="date"
                 android:paddingStart="20dp"
+                android:afterTextChanged="@{(editable)->viewModel.afterDOBTextChanged(editable)}"
                 tools:ignore="MissingConstraints,RtlSymmetry"
                 tools:layout_editor_absoluteX="3dp"
                 tools:layout_editor_absoluteY="200dp" />
@@ -163,6 +166,7 @@
                 android:hint="@string/mobile_number"
                 android:inputType="phone"
                 android:paddingStart="20dp"
+                android:afterTextChanged="@{(editable)->viewModel.afterPhoneTextChanged(editable)}"
                 tools:ignore="MissingConstraints,RtlSymmetry"
                 tools:layout_editor_absoluteX="3dp"
                 tools:layout_editor_absoluteY="200dp" />
@@ -209,6 +213,7 @@
                 android:autofillHints="@string/email"
                 android:backgroundTint="@color/colorLightWhite"
                 android:hint="@string/email"
+                android:afterTextChanged="@{(editable)->viewModel.afterEmailTextChanged(editable)}"
                 android:inputType="textEmailAddress"
                 android:paddingStart="20dp"
                 tools:ignore="MissingConstraints,RtlSymmetry"
@@ -260,6 +265,7 @@
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:paddingStart="20dp"
+                android:afterTextChanged="@{(editable)->viewModel.afterPasswordTextChanged(editable)}"
                 tools:ignore="MissingConstraints,RtlSymmetry"
                 tools:layout_editor_absoluteX="10dp"
                 tools:layout_editor_absoluteY="269dp" />

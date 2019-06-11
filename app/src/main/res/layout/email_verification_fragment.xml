@@ -52,6 +52,7 @@
             android:autofillHints="@string/email"
             android:backgroundTint="@color/colorLightWhite"
             android:hint="@string/email"
+            android:afterTextChanged="@{(editable)-> viewModel.afterEmailTextChanged(editable)}"
             android:inputType="textEmailAddress"
             android:paddingStart="20dp"
             tools:ignore="MissingConstraints,RtlSymmetry"

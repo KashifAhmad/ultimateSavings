@@ -3,7 +3,7 @@ package com.techease.ultimatesavings.utils.networking;
 import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
 import com.techease.ultimatesavings.models.changePasswordModel.ChangePasswordModel;
 import com.techease.ultimatesavings.models.filteredShops.FilteredShopsModel;
-import com.techease.ultimatesavings.models.forgotPasswordModels.ForgotPasswordModel;
+import com.techease.ultimatesavings.models.verifyEmailModels.VerifyEmailModel;
 import com.techease.ultimatesavings.models.loginModels.LoginModel;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
 import com.techease.ultimatesavings.models.signModels.SignupModels;
@@ -31,14 +31,14 @@ public interface APIServices {
 
     @FormUrlEncoded
     @POST("signup/forgot")
-    Call<ForgotPasswordModel> forgotPassword(@Field("email") String email);
+    Call<VerifyEmailModel> emailVerificaiton(@Field("email") String email);
 
     @FormUrlEncoded
     @POST("signup/CheckCode")
     Call<VerifyCodeModel> verifyCode(@Field("code") String code);
 
     @FormUrlEncoded
-    @POST("signup/login")
+    @POST("signup/Resetpassword")
     Call<ChangePasswordModel> changePassword(@Field("code") String code,
                                              @Field("password") String password);
 
