@@ -59,7 +59,7 @@ public interface APIServices {
     @FormUrlEncoded
     @POST("app/search")
     Call<SearchShop> searchShop(@Field("lat") String lat,
-                                @Field("lon") String lng,
+                                @Field("lng") String lng,
                                 @Field("title") String title);
 
 }
