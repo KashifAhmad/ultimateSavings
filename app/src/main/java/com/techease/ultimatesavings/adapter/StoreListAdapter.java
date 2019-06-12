@@ -46,7 +46,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.MyVi
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Datum allStoreModel = allPropertiesDataList.get(position);
         holder.tvStoreName.setText(allStoreModel.getTitle());
-        holder.tvStoreDistance.setText(allStoreModel.getDistance());
+        holder.tvStoreDistance.setText(allStoreModel.getDistance()+" away");
         Picasso.get().load(allStoreModel.getPicture()).into(holder.ivStoreImage);
 
 

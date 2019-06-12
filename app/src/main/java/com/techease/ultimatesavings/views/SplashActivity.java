@@ -8,7 +8,6 @@ import android.os.Bundle;
 import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.utils.AppRepository;
 import com.techease.ultimatesavings.views.ui.BottomNavigationActivity;
-import com.techease.ultimatesavings.views.ui.StoreMapsActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

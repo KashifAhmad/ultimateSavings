@@ -12,7 +12,7 @@ import com.techease.ultimatesavings.utils.DialogBuilder;
 import com.techease.ultimatesavings.utils.networking.BaseNetworking;
 import com.techease.ultimatesavings.views.EmailVerificationActivity;
 import com.techease.ultimatesavings.views.SignUpActivity;
-import com.techease.ultimatesavings.views.ui.StoreMapsActivity;
+import com.techease.ultimatesavings.views.ui.BottomNavigationActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,7 +59,7 @@ public class LoginViewModel extends BaseObservable {
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
                 DialogBuilder.dialog.dismiss();
                 if (response.body().getSuccess()) {
-                    mContext.startActivity(new Intent(mContext, StoreMapsActivity.class));
+                    mContext.startActivity(new Intent(mContext, BottomNavigationActivity.class));
                     AppRepository.mEditor(mContext).putBoolean("loggedIn", true).commit();
                 } else {
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
