@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.techease.ultimatesavings.R;
+import com.techease.ultimatesavings.views.ui.BottomNavigationActivity;
 
 import java.util.Objects;
 
@@ -23,6 +24,8 @@ public class LoginRegisterSecondActivity extends AppCompatActivity implements Vi
     TextView tvRegister;
     @BindView(R.id.tv_next)
     TextView tvNext;
+    @BindView(R.id.tv_skip)
+    TextView tvSKip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class LoginRegisterSecondActivity extends AppCompatActivity implements Vi
         tvLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this);
         tvNext.setOnClickListener(this);
+        tvSKip.setOnClickListener(this);
     }
 
     @Override
@@ -51,6 +55,9 @@ public class LoginRegisterSecondActivity extends AppCompatActivity implements Vi
                 break;
             case R.id.tv_next:
                 break;
+            case R.id.tv_skip:
+                startActivity(new Intent(this, BottomNavigationActivity.class));
+                finishAffinity();
 
         }
     }

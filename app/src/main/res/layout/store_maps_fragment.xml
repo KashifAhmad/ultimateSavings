@@ -13,7 +13,7 @@
         <com.techease.ultimatesavings.utils.MapWrapperLayout
             android:id="@+id/map_relative_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <fragment
                 android:id="@+id/map"
@@ -26,15 +26,21 @@
         <com.arlib.floatingsearchview.FloatingSearchView
             android:id="@+id/floating_search_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_height="60dp"
+            app:floatingSearch_searchInputTextSize="8sp"
+            app:floatingSearch_backgroundColor="@color/colorPrimary"
+            app:floatingSearch_hintTextColor="@color/colorWhite"
             app:floatingSearch_close_search_on_keyboard_dismiss="false"
             app:floatingSearch_dimBackground="false"
             app:floatingSearch_dismissOnOutsideTouch="true"
             app:floatingSearch_leftActionMode="showHamburger"
+            app:floatingSearch_viewTextColor="@color/colorWhite"
+            app:floatingSearch_leftActionColor="@color/colorWhite"
+            app:floatingSearch_menuItemIconColor="@color/colorWhite"
+            app:floatingSearch_suggestionRightIconColor="@color/colorWhite"
             app:floatingSearch_menu="@menu/search_menu"
-            app:floatingSearch_searchBarMarginRight="40dp"
-            app:floatingSearch_searchHint="Search here"
+
+            app:floatingSearch_searchHint="search for grocery item or brand"
             app:floatingSearch_showSearchKey="true"
             app:floatingSearch_suggestionsListAnimDuration="250" />
 
@@ -42,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
+            android:visibility="gone"
             android:layout_alignParentEnd="true"
             android:src="@mipmap/cart" />
 

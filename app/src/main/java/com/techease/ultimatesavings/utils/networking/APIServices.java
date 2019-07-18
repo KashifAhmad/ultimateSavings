@@ -3,6 +3,8 @@ package com.techease.ultimatesavings.utils.networking;
 import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
 import com.techease.ultimatesavings.models.changePasswordModel.ChangePasswordModel;
 import com.techease.ultimatesavings.models.filteredShops.FilteredShopsModel;
+import com.techease.ultimatesavings.models.popularSearches.PopularSearchResponse;
+import com.techease.ultimatesavings.models.recentSearches.RecentSearchResponse;
 import com.techease.ultimatesavings.models.verifyEmailModels.VerifyEmailModel;
 import com.techease.ultimatesavings.models.loginModels.LoginModel;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
@@ -12,6 +14,7 @@ import com.techease.ultimatesavings.models.verifyCodeModel.VerifyCodeModel;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface APIServices {
@@ -60,7 +63,16 @@ public interface APIServices {
     @POST("app/search")
     Call<SearchShop> searchShop(@Field("lat") String lat,
                                 @Field("lng") String lng,
-                                @Field("title") String title);
+                                @Field("title") String title,
+                                @Field("size") String size,
+                                @Field("color") String color,
+                                @Field("userid") int userId);
+    @FormUrlEncoded
+    @POST("app/recentSearches")
+    Call<RecentSearchResponse> recentSearched(@Field("userid") int id);
+
+    @GET("app/popularSearches")
+    Call<PopularSearchResponse> popularSearches();
 
 }
 

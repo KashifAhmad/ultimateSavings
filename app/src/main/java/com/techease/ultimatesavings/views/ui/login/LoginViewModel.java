@@ -61,6 +61,7 @@ public class LoginViewModel extends BaseObservable {
                 if (response.body().getSuccess()) {
                     mContext.startActivity(new Intent(mContext, BottomNavigationActivity.class));
                     AppRepository.mEditor(mContext).putBoolean("loggedIn", true).commit();
+                    AppRepository.mEditor(mContext).putInt("userID", response.body().getUser().getUserId()).commit();
                 } else {
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }

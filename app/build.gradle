@@ -75,6 +75,12 @@ dependencies {
 
     //location picker
     implementation 'io.nlopez.smartlocation:library:3.3.3'
+    //scrollbar
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
+    //material spinner
+    implementation 'com.jaredrummler:material-spinner:1.2.5'
+
+
 
 
 }

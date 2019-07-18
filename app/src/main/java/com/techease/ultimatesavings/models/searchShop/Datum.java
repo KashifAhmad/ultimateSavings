@@ -1,4 +1,3 @@
-
 package com.techease.ultimatesavings.models.searchShop;
 
 
@@ -26,6 +25,27 @@ public class Datum {
     private String mShopId;
     @SerializedName("shop_title")
     private String mShopTitle;
+    @SerializedName("size")
+    private String mSize;
+    @SerializedName("color")
+    private String mColor;
+
+    public String getSize() {
+        return mSize;
+    }
+
+    public void setSize(String mSize) {
+        this.mSize = mSize;
+    }
+
+    public String getmColor() {
+        return mColor;
+    }
+
+    public void setmColor(String mColor) {
+        this.mColor = mColor;
+    }
+
 
     public String getDistance() {
         return mDistance;

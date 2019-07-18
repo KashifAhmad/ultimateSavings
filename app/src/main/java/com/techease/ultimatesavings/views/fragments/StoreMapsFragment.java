@@ -1,25 +1,29 @@
 package com.techease.ultimatesavings.views.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +34,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -37,12 +42,18 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 import com.techease.ultimatesavings.R;
+import com.techease.ultimatesavings.adapter.PopularSearchesAdapter;
+import com.techease.ultimatesavings.adapter.RecentSearchesAdapter;
 import com.techease.ultimatesavings.adapter.SearchedStoreListAdapter;
 import com.techease.ultimatesavings.adapter.StoreListAdapter;
 import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
 import com.techease.ultimatesavings.models.allShopsModel.Datum;
+import com.techease.ultimatesavings.models.popularSearches.PopularSearchResponse;
+import com.techease.ultimatesavings.models.recentSearches.RecentSearchResponse;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
+import com.techease.ultimatesavings.utils.AppRepository;
 import com.techease.ultimatesavings.utils.Connectivity;
+import com.techease.ultimatesavings.utils.DialogBuilder;
 import com.techease.ultimatesavings.utils.GPSTracker;
 import com.techease.ultimatesavings.utils.MapWrapperLayout;
 import com.techease.ultimatesavings.utils.OnInfoWindowElemTouchListener;
@@ -69,26 +80,36 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     FloatingSearchView mSearchView;
     @BindView(R.id.rv_stores)
     RecyclerView rvStores;
+
     @BindView(R.id.map_relative_layout)
     MapWrapperLayout mapWrapperLayout;
     List<Datum> allShops;
     List<com.techease.ultimatesavings.models.searchShop.Datum> searchedShops;
     CircleImageView ivNotaryProfile;
     StoreListAdapter adapter;
+    MarkerOptions markerOptions;
+    GPSTracker gpsTracker;
+    boolean isSearch = false;
+    List<com.techease.ultimatesavings.models.recentSearches.Datum> recentList = new ArrayList<>();
+    RecentSearchesAdapter recentSearchesAdapter;
+    List<com.techease.ultimatesavings.models.popularSearches.Datum> popularList = new ArrayList<>();
+    PopularSearchesAdapter popularSearchesAdapter;
     private View view;
     private GoogleMap mMap;
-    MarkerOptions markerOptions;
     private List<Marker> markers;
     private ViewGroup infoWindow;
-    GPSTracker gpsTracker;
-    private String lat, lon;
+    private String lat, lon, size, color, title;
     private OnInfoWindowElemTouchListener infoButtonListener, infoProfileListener;
-    boolean isSearch = false;
+    private Dialog dialog;
 
     public static StoreMapsFragment newInstance() {
         return new StoreMapsFragment();
     }
 
+    public static int getPixelsFromDp(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -99,9 +120,9 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-
     private void initUI() {
         ButterKnife.bind(this, view);
+
         markerOptions = new MarkerOptions();
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -120,6 +141,14 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         lat = String.valueOf(gpsTracker.getLatitude());
         lon = String.valueOf(gpsTracker.getLongitude());
         initAdapter();
+        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+            @Override
+            public void onSearchTextChanged(String oldQuery, String newQuery) {
+                Log.d("zma title", newQuery);
+
+            }
+        });
+
 
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
@@ -130,63 +159,27 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSearchAction(String currentQuery) {
                 if (Connectivity.isConnected(getActivity())) {
+                    title = currentQuery;
+
                     searchStore(currentQuery);
+
                 } else {
                     Toast.makeText(getActivity(), "No internet connection!", Toast.LENGTH_SHORT).show();
                 }
                 Log.d("zma query", currentQuery);
             }
         });
+        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+            @Override
+            public void onBindSuggestion(View suggestionView, ImageView leftIcon, TextView textView, SearchSuggestion item, int itemPosition) {
+
+            }
+        });
     }
 
     private void searchStore(final String currentQuery) {
         searchedShops = new ArrayList<>();
-        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, currentQuery);
-        searchShops.enqueue(new Callback<SearchShop>() {
-            @Override
-            public void onResponse(Call<SearchShop> call, Response<SearchShop> response) {
-                if (response.body().getSuccess()){
-                    if (response.body().getData().size()>0) {
-                        allShops.clear();
-                        searchedShops.addAll(response.body().getData());
-                        SearchedStoreListAdapter searchAdapter = new SearchedStoreListAdapter(searchedShops, getActivity());
-                        adapter.notifyDataSetChanged();
-                        rvStores.setAdapter(searchAdapter);
-
-                        for (int i = 0; i < searchedShops.size(); i++) {
-                            isSearch = true;
-                            mMap.clear();
-                            Marker marker = mMap.addMarker(markerOptions.position(new LatLng(Double.parseDouble(searchedShops.get(i).getLatitude()),
-                                    Double.parseDouble(searchedShops.get(i).getLongitude()))).
-                                    icon(BitmapDescriptorFactory.fromResource(R.mipmap.location)).
-                                    snippet(searchedShops.get(i).getDistance() + " KM's away"));
-                            marker.setTag(searchedShops.get(i));
-                            marker.showInfoWindow();
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 10));
-                            markers.add(marker);
-                        }
-                    }else {
-
-                    }
-
-                }else {
-                    try {
-                        JSONObject jErrorObect = new JSONObject(response.errorBody().string());
-                        Toast.makeText(getActivity(), jErrorObect.getString("message"), Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SearchShop> call, Throwable t) {
-
-            }
-        });
+        filterDialog(getActivity(), currentQuery);
 
 
     }
@@ -224,11 +217,11 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public View getInfoContents(Marker marker) {
                 // Setting up the infoWindow with current's marker info
-                if (isSearch){
+                if (isSearch) {
                     com.techease.ultimatesavings.models.searchShop.Datum mModel = (com.techease.ultimatesavings.models.searchShop.Datum) marker.getTag();
                     Picasso.get().load(mModel.getPicture()).into(ivNotaryProfile);
                     isSearch = false;
-                }else {
+                } else {
                     Datum model = (Datum) marker.getTag();
 
                     Picasso.get().load(model.getPicture()).into(ivNotaryProfile);
@@ -250,11 +243,6 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
 //        });
         initData();
 
-    }
-
-    public static int getPixelsFromDp(Context context, float dp) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
     }
 
     private void checkPermissions() {
@@ -303,7 +291,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         shopsData.enqueue(new Callback<AllShopsModel>() {
             @Override
             public void onResponse(Call<AllShopsModel> call, Response<AllShopsModel> response) {
-                if (response.isSuccessful()) {
+                if (response.body().getSuccess()) {
                     allShops.addAll(response.body().getData());
                     adapter.notifyDataSetChanged();
                     for (int i = 0; i < allShops.size(); i++) {
@@ -334,5 +322,155 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
                 Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public AlertDialog filterDialog(Context context, String query) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+// ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_filter_layout, null);
+        dialogBuilder.setView(dialogView);
+        MaterialSpinner spinnerSize = dialogView.findViewById(R.id.spinner_size);
+        MaterialSpinner spinnerColor = dialogView.findViewById(R.id.spinner_color);
+        final TextView tvSearchedItem = dialogView.findViewById(R.id.tv_item_title);
+        Button btnSearch = dialogView.findViewById(R.id.btn_filter);
+        tvSearchedItem.setText(query);
+        spinnerColor.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                color = item.toString();
+            }
+        });
+        spinnerSize.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                size = item.toString();
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchResults();
+                DialogBuilder.dialogBuilder(getActivity(), "");
+                dialog.dismiss();
+            }
+        });
+
+
+        spinnerSize.setItems("Size", "S", "M", "L", "XL", "XXL", "XXXL");
+        spinnerColor.setItems("Color", "White", "Black", "Red", "Pink", "Orange", "Purple");
+
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        RecyclerView rvRecentSearches = dialogView.findViewById(R.id.rv_recent_searches);
+        RecyclerView rvPopularSearches = dialogView.findViewById(R.id.rv_popular_searches);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        rvRecentSearches.setLayoutManager(layoutManager);
+        rvPopularSearches.setLayoutManager(layoutManager1);
+        recentSearchesAdapter = new RecentSearchesAdapter(recentList, getActivity());
+        popularSearchesAdapter = new PopularSearchesAdapter(popularList, getActivity());
+        rvPopularSearches.setAdapter(popularSearchesAdapter);
+        rvRecentSearches.setAdapter(recentSearchesAdapter);
+        recentSearches();
+        getPopularSearches();
+        return (AlertDialog) dialog;
+    }
+
+    private void recentSearches() {
+        Call<RecentSearchResponse> recentSearchResponseCall = BaseNetworking.apiServices()
+                .recentSearched(AppRepository.mUserID(getActivity()));
+        recentSearchResponseCall.enqueue(new Callback<RecentSearchResponse>() {
+            @Override
+                public void onResponse(Call<RecentSearchResponse> call, Response<RecentSearchResponse> response) {
+                Log.d("zma id", "sho");
+                if (response.isSuccessful()) {
+                    recentList.addAll(response.body().getData());
+                    recentSearchesAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RecentSearchResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void searchResults() {
+
+        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, title, size, color, AppRepository.mUserID(getActivity()));
+        searchShops.enqueue(new Callback<SearchShop>() {
+            @Override
+            public void onResponse(Call<SearchShop> call, Response<SearchShop> response) {
+                DialogBuilder.dialog.dismiss();
+                if (response.body().getSuccess()) {
+                    if (response.body().getData().size() > 0) {
+                        allShops.clear();
+                        searchedShops.addAll(response.body().getData());
+                        SearchedStoreListAdapter searchAdapter = new SearchedStoreListAdapter(searchedShops, getActivity());
+                        adapter.notifyDataSetChanged();
+                        rvStores.setAdapter(searchAdapter);
+
+                        for (int i = 0; i < searchedShops.size(); i++) {
+                            isSearch = true;
+                            mMap.clear();
+                            Marker marker = mMap.addMarker(markerOptions.position(new LatLng(Double.parseDouble(searchedShops.get(i).getLatitude()),
+                                    Double.parseDouble(searchedShops.get(i).getLongitude()))).
+                                    icon(BitmapDescriptorFactory.fromResource(R.mipmap.location)).
+                                    snippet(searchedShops.get(i).getDistance() + " KM's away"));
+                            marker.setTag(searchedShops.get(i));
+                            marker.showInfoWindow();
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 10));
+                            markers.add(marker);
+                        }
+                    } else {
+
+                    }
+
+                } else {
+                    allShops.clear();
+                    rvStores.removeAllViews();
+                    mMap.clear();
+                    Toast.makeText(getActivity(), "No shops found", Toast.LENGTH_SHORT).show();
+//                    try {
+//                        JSONObject jErrorObect = new JSONObject(response.errorBody().string());
+//                        Toast.makeText(getActivity(), jErrorObect.getString("message"), Toast.LENGTH_SHORT).show();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchShop> call, Throwable t) {
+                DialogBuilder.dialog.dismiss();
+            }
+        });
+    }
+    private void getPopularSearches(){
+        Call<PopularSearchResponse> popularSearchResponseCall = BaseNetworking.apiServices().popularSearches();
+        popularSearchResponseCall.enqueue(new Callback<PopularSearchResponse>() {
+            @Override
+            public void onResponse(Call<PopularSearchResponse> call, Response<PopularSearchResponse> response) {
+                if (response.isSuccessful()){
+                    popularList.addAll(response.body().getData());
+                    popularSearchesAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PopularSearchResponse> call, Throwable t) {
+
+            }
+        });
+
     }
 }

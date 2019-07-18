@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.utils.ViewChanger;
 import com.techease.ultimatesavings.views.fragments.StoreMapsFragment;
+import com.techease.ultimatesavings.views.ui.settings.SettingsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
 
                     return true;
                 case R.id.navigation_profile:
-
+                    ViewChanger.fragmentChanger(BottomNavigationActivity.this, new SettingsFragment(), R.id.container);
                     return true;
             }
             return false;

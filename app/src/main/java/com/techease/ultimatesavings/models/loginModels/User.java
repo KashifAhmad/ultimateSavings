@@ -11,7 +11,7 @@ public class User {
     @SerializedName("token")
     private String mToken;
     @SerializedName("user_id")
-    private Long mUserId;
+    private int mUserId;
     @SerializedName("user_name")
     private String mUserName;
 
@@ -31,11 +31,11 @@ public class User {
         mToken = token;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return mUserId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         mUserId = userId;
     }
 

@@ -25,6 +25,10 @@ public class AppRepository {
     public static String mDeviceToken(Context context) {
         return mSharedPref(context).getString("device_token", "");
     }
+
+    public static int mUserID(Context context) {
+        return mSharedPref(context).getInt("userID", 0);
+    }
     public static boolean isLoggedIn(Context context) {
         return mSharedPref(context).getBoolean("loggedIn", false);
     }
