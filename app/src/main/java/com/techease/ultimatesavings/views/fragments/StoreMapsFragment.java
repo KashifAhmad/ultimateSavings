@@ -44,6 +44,7 @@ import com.squareup.picasso.Picasso;
 import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.adapter.PopularSearchesAdapter;
 import com.techease.ultimatesavings.adapter.RecentSearchesAdapter;
+import com.techease.ultimatesavings.adapter.SearchResultsListAdapter;
 import com.techease.ultimatesavings.adapter.SearchedStoreListAdapter;
 import com.techease.ultimatesavings.adapter.StoreListAdapter;
 import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
@@ -51,6 +52,7 @@ import com.techease.ultimatesavings.models.allShopsModel.Datum;
 import com.techease.ultimatesavings.models.popularSearches.PopularSearchResponse;
 import com.techease.ultimatesavings.models.recentSearches.RecentSearchResponse;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
+import com.techease.ultimatesavings.models.signModels.DataHelper;
 import com.techease.ultimatesavings.utils.AppRepository;
 import com.techease.ultimatesavings.utils.Connectivity;
 import com.techease.ultimatesavings.utils.DialogBuilder;
@@ -78,8 +80,12 @@ import retrofit2.Response;
 public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     @BindView(R.id.floating_search_view)
     FloatingSearchView mSearchView;
+
     @BindView(R.id.rv_stores)
     RecyclerView rvStores;
+
+    @BindView(R.id.search_results_list)
+    RecyclerView mSearchResultsList;
 
     @BindView(R.id.map_relative_layout)
     MapWrapperLayout mapWrapperLayout;
@@ -101,6 +107,15 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     private String lat, lon, size, color, title;
     private OnInfoWindowElemTouchListener infoButtonListener, infoProfileListener;
     private Dialog dialog;
+    private final String TAG = "BlankFragment";
+
+    public static final long FIND_SUGGESTION_SIMULATED_DELAY = 250;
+
+    private SearchResultsListAdapter mSearchResultsAdapter;
+
+    private boolean mIsDarkSearchTheme = false;
+
+    private String mLastQuery = "";
 
     public static StoreMapsFragment newInstance() {
         return new StoreMapsFragment();
@@ -119,9 +134,10 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         initUI();
         return view;
     }
-
     private void initUI() {
         ButterKnife.bind(this, view);
+        recentSearchesAPICall();
+        setupFloatingSearch();
 
         markerOptions = new MarkerOptions();
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
@@ -175,6 +191,85 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+    }
+
+
+
+
+    private void setupFloatingSearch() {
+
+
+        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+
+            @Override
+            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+
+                if (!oldQuery.equals("") && newQuery.equals("")) {
+                    mSearchView.clearSuggestions();
+                } else {
+
+                    //this shows the top left circular progress
+                    //you can call it where ever you want, but
+                    //it makes sense to do it when loading something in
+                    //the background.
+                    mSearchView.showProgress();
+
+                    //simulates a query call to a data source
+                    //with a new query.
+                    DataHelper.findSuggestions(getActivity(), newQuery, 5,
+                            FIND_SUGGESTION_SIMULATED_DELAY, new DataHelper.OnFindSuggestionsListener() {
+
+                                @Override
+                                public void onResults(List<com.techease.ultimatesavings.models.recentSearches.Datum> results) {
+
+                                    //this will swap the data and
+                                    //render the collapse/expand animations as necessary
+                                    mSearchView.swapSuggestions(results);
+
+                                    //let the users know that the background
+                                    //process has completed
+                                    mSearchView.hideProgress();
+                                }
+                            });
+                }
+
+                Log.d(TAG, "onSearchTextChanged()");
+            }
+        });
+        mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+            @Override
+            public void onFocus() {
+
+                //show suggestions when search bar gains focus (typically history suggestions)
+                mSearchView.swapSuggestions(DataHelper.getHistory(getActivity(), 3));
+
+                Log.d(TAG, "onFocus()");
+
+                recentSearchesAPICall();
+                setupResultsList();
+            }
+
+            @Override
+            public void onFocusCleared() {
+
+                //set the title of the bar so that when focus is returned a new query begins
+                mSearchView.setSearchBarTitle(mLastQuery);
+                recentList.clear();
+                //you can also set setSearchText(...) to make keep the query there when not focused and when focus returns
+                //mSearchView.setSearchText(searchSuggestion.getBody());
+
+                Log.d(TAG, "onFocusCleared()");
+            }
+        });
+
+    }
+
+
+    private void setupResultsList() {
+        mSearchResultsAdapter = new SearchResultsListAdapter(getActivity(), recentList);
+        mSearchResultsList.setAdapter(mSearchResultsAdapter);
+        mSearchResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
+
     }
 
     private void searchStore(final String currentQuery) {
@@ -371,16 +466,16 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvRecentSearches.setLayoutManager(layoutManager);
         rvPopularSearches.setLayoutManager(layoutManager1);
-        recentSearchesAdapter = new RecentSearchesAdapter(recentList, getActivity());
-        popularSearchesAdapter = new PopularSearchesAdapter(popularList, getActivity());
-        rvPopularSearches.setAdapter(popularSearchesAdapter);
-        rvRecentSearches.setAdapter(recentSearchesAdapter);
-        recentSearches();
+//        recentSearchesAdapter = new RecentSearchesAdapter(recentList, getActivity());
+//        popularSearchesAdapter = new PopularSearchesAdapter(popularList, getActivity());
+//        rvPopularSearches.setAdapter(popularSearchesAdapter);
+//        rvRecentSearches.setAdapter(recentSearchesAdapter);
+        recentSearchesAPICall();
         getPopularSearches();
         return (AlertDialog) dialog;
     }
 
-    private void recentSearches() {
+    private void recentSearchesAPICall() {
         Call<RecentSearchResponse> recentSearchResponseCall = BaseNetworking.apiServices()
                 .recentSearched(AppRepository.mUserID(getActivity()));
         recentSearchResponseCall.enqueue(new Callback<RecentSearchResponse>() {
@@ -389,7 +484,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
                 Log.d("zma id", "sho");
                 if (response.isSuccessful()) {
                     recentList.addAll(response.body().getData());
-                    recentSearchesAdapter.notifyDataSetChanged();
+//                    recentSearchesAdapter.notifyDataSetChanged();
                 }
             }
 
