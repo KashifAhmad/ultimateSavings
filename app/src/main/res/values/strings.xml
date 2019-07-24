@@ -25,15 +25,9 @@
     <string name="reset">Reset</string>
     <string name="reset_password">Reset Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="title_activity_register_with">RegisterWithActivity</string>
     <string name="register_with">Register with</string>
     <string name="or">Or</string>
     <string name="email_id">Email ID</string>
-    <string name="title_activity_store_maps">Map</string>
     <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_maps">Map</string>
     <string name="skip">Skip</string>
 </resources>

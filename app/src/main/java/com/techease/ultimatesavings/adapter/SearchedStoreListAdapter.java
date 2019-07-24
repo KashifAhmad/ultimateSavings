@@ -25,16 +25,18 @@ public class SearchedStoreListAdapter extends RecyclerView.Adapter<SearchedStore
 
     private Context context;
     private List<Datum> allPropertiesDataList;
+    int mView;
 
-    public SearchedStoreListAdapter(List<Datum> allPropertiesDataList, Context context) {
+    public SearchedStoreListAdapter(List<Datum> allPropertiesDataList, Context context, int view) {
         this.allPropertiesDataList = allPropertiesDataList;
         this.context = context;
+        this.mView = view;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_store_layout, parent, false);
+                .inflate(mView, parent, false);
 
         return new MyViewHolder(itemView);
     }

@@ -4,7 +4,8 @@ import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
 import com.techease.ultimatesavings.models.changePasswordModel.ChangePasswordModel;
 import com.techease.ultimatesavings.models.filteredShops.FilteredShopsModel;
 import com.techease.ultimatesavings.models.popularSearches.PopularSearchResponse;
-import com.techease.ultimatesavings.models.recentSearches.RecentSearchResponse;
+import com.techease.ultimatesavings.models.recentSearches.RecentSearchesResponse;
+import com.techease.ultimatesavings.models.updatedPopularSearch.UpdatedPopularSearchResponse;
 import com.techease.ultimatesavings.models.verifyEmailModels.VerifyEmailModel;
 import com.techease.ultimatesavings.models.loginModels.LoginModel;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
@@ -69,10 +70,13 @@ public interface APIServices {
                                 @Field("userid") int userId);
     @FormUrlEncoded
     @POST("app/recentSearches")
-    Call<RecentSearchResponse> recentSearched(@Field("userid") int id);
+    Call<RecentSearchesResponse> recentSearched(@Field("userid") int id);
 
     @GET("app/popularSearches")
     Call<PopularSearchResponse> popularSearches();
+
+    @GET("app/popularSearches")
+    Call<UpdatedPopularSearchResponse> updatedPopularSearch();
 
 }
 

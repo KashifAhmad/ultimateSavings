@@ -1,4 +1,5 @@
-package com.techease.ultimatesavings.models.recentSearches;
+
+package com.techease.ultimatesavings.models.updatedPopularSearch;
 
 import android.annotation.SuppressLint;
 import android.os.Parcel;
@@ -6,30 +7,9 @@ import android.os.Parcel;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.gson.annotations.SerializedName;
 
-
 @SuppressLint("ParcelCreator")
 @SuppressWarnings("unused")
 public class Datum implements SearchSuggestion {
-
-
-    private boolean mIsHistory = false;
-
-    @SerializedName("color")
-    private String mColor;
-    @SerializedName("created_at")
-    private String mCreatedAt;
-    @SerializedName("id")
-    private String mId;
-    @SerializedName("lat")
-    private String mLat;
-    @SerializedName("lng")
-    private String mLng;
-    @SerializedName("search_query")
-    private String mSearchQuery;
-    @SerializedName("size")
-    private String mSize;
-    @SerializedName("user_id")
-    private String mUserId;
 
     public boolean getIsHistory() {
         return mIsHistory;
@@ -39,28 +19,27 @@ public class Datum implements SearchSuggestion {
         this.mIsHistory = mIsHistory;
     }
 
+    private boolean mIsHistory = false;
+
+    @SerializedName("color")
+    private String mColor;
+    @SerializedName("lat")
+    private String mLat;
+    @SerializedName("lng")
+    private String mLng;
+    @SerializedName("search_query")
+    private String mSearchQuery;
+    @SerializedName("size")
+    private String mSize;
+    @SerializedName("total_seraches")
+    private String mTotalSeraches;
+
     public String getColor() {
         return mColor;
     }
 
     public void setColor(String color) {
         mColor = color;
-    }
-
-    public String getCreatedAt() {
-        return mCreatedAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        mCreatedAt = createdAt;
-    }
-
-    public String getId() {
-        return mId;
-    }
-
-    public void setId(String id) {
-        mId = id;
     }
 
     public String getLat() {
@@ -95,12 +74,12 @@ public class Datum implements SearchSuggestion {
         mSize = size;
     }
 
-    public String getUserId() {
-        return mUserId;
+    public String getTotalSeraches() {
+        return mTotalSeraches;
     }
 
-    public void setUserId(String userId) {
-        mUserId = userId;
+    public void setTotalSeraches(String totalSeraches) {
+        mTotalSeraches = totalSeraches;
     }
 
     @Override

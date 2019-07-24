@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,12 @@ public class RecentSearchesAdapter extends RecyclerView.Adapter<RecentSearchesAd
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Datum allStoreModel = allPropertiesDataList.get(position);
         holder.tvRecentSearchedTerm.setText(allStoreModel.getSearchQuery());
+        holder.tvRecentSearchedTerm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("zma search item", allStoreModel.getLat());
+            }
+        });
 
 
 

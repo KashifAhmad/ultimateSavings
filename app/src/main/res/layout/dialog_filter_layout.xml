@@ -10,7 +10,6 @@
     android:padding="@dimen/text_size">
 
     <TextView
-        android:id="@+id/filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Filter"
@@ -98,49 +97,13 @@
         android:layout_marginTop="@dimen/text_size"
         android:text="Products around you"
         android:textColor="@color/colorPrimary" />
-    <TextView
-        android:id="@+id/recent_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/checkbox"
-        android:layout_marginTop="@dimen/text_size"
-        android:layout_marginBottom="10dp"
-        android:text="Recent Searches"
-        android:textColor="@color/colorPrimary" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_recent_searches"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:background="@color/background"
-        android:padding="10dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recent_search"/>
-
-    <TextView
-        android:id="@+id/popular_searches"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rv_recent_searches"
-        android:layout_marginTop="@dimen/text_size"
-        android:layout_marginBottom="10dp"
-        android:text="Popular Searches"
-        android:textColor="@color/colorPrimary" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_popular_searches"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:background="@color/background"
-        android:padding="10dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/popular_searches"/>
 
     <Button
         android:id="@+id/btn_filter"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rv_popular_searches"
+        android:layout_below="@id/checkbox"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:background="@drawable/round_button_blue"

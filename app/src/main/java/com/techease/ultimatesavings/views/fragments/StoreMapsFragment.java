@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,17 +44,19 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 import com.techease.ultimatesavings.R;
+import com.techease.ultimatesavings.adapter.PopularSearchSuggestionAdapter;
 import com.techease.ultimatesavings.adapter.PopularSearchesAdapter;
-import com.techease.ultimatesavings.adapter.RecentSearchesAdapter;
-import com.techease.ultimatesavings.adapter.SearchResultsListAdapter;
+import com.techease.ultimatesavings.adapter.RecentSearchSuggestionAdapter;
 import com.techease.ultimatesavings.adapter.SearchedStoreListAdapter;
 import com.techease.ultimatesavings.adapter.StoreListAdapter;
+import com.techease.ultimatesavings.models.PopularSearchesHelper;
 import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
 import com.techease.ultimatesavings.models.allShopsModel.Datum;
 import com.techease.ultimatesavings.models.popularSearches.PopularSearchResponse;
-import com.techease.ultimatesavings.models.recentSearches.RecentSearchResponse;
+import com.techease.ultimatesavings.models.updatedPopularSearch.UpdatedPopularSearchResponse;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
-import com.techease.ultimatesavings.models.signModels.DataHelper;
+import com.techease.ultimatesavings.models.RecentSearchesHelper;
+import com.techease.ultimatesavings.models.recentSearches.RecentSearchesResponse;
 import com.techease.ultimatesavings.utils.AppRepository;
 import com.techease.ultimatesavings.utils.Connectivity;
 import com.techease.ultimatesavings.utils.DialogBuilder;
@@ -60,6 +64,7 @@ import com.techease.ultimatesavings.utils.GPSTracker;
 import com.techease.ultimatesavings.utils.MapWrapperLayout;
 import com.techease.ultimatesavings.utils.OnInfoWindowElemTouchListener;
 import com.techease.ultimatesavings.utils.networking.BaseNetworking;
+import com.techease.ultimatesavings.views.SearchActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,17 +83,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
+    public static final long FIND_SUGGESTION_SIMULATED_DELAY = 250;
+    private final String TAG = "BlankFragment";
     @BindView(R.id.floating_search_view)
     FloatingSearchView mSearchView;
-
     @BindView(R.id.rv_stores)
     RecyclerView rvStores;
-
     @BindView(R.id.search_results_list)
     RecyclerView mSearchResultsList;
-
+    @BindView(R.id.rv_popular_searches)
+    RecyclerView rvPopularSearches;
     @BindView(R.id.map_relative_layout)
     MapWrapperLayout mapWrapperLayout;
+    @BindView(R.id.popular_searches)
+            TextView tvPopularSearches;
     List<Datum> allShops;
     List<com.techease.ultimatesavings.models.searchShop.Datum> searchedShops;
     CircleImageView ivNotaryProfile;
@@ -97,8 +105,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     GPSTracker gpsTracker;
     boolean isSearch = false;
     List<com.techease.ultimatesavings.models.recentSearches.Datum> recentList = new ArrayList<>();
-    RecentSearchesAdapter recentSearchesAdapter;
-    List<com.techease.ultimatesavings.models.popularSearches.Datum> popularList = new ArrayList<>();
+    List<com.techease.ultimatesavings.models.updatedPopularSearch.Datum> updatedPopularList = new ArrayList<>();
     PopularSearchesAdapter popularSearchesAdapter;
     private View view;
     private GoogleMap mMap;
@@ -107,13 +114,8 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     private String lat, lon, size, color, title;
     private OnInfoWindowElemTouchListener infoButtonListener, infoProfileListener;
     private Dialog dialog;
-    private final String TAG = "BlankFragment";
-
-    public static final long FIND_SUGGESTION_SIMULATED_DELAY = 250;
-
-    private SearchResultsListAdapter mSearchResultsAdapter;
-
-    private boolean mIsDarkSearchTheme = false;
+    private RecentSearchSuggestionAdapter mSearchResultsAdapter;
+    private PopularSearchSuggestionAdapter mPopularSearchSuggestionAdapter;
 
     private String mLastQuery = "";
 
@@ -134,9 +136,9 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         initUI();
         return view;
     }
+
     private void initUI() {
         ButterKnife.bind(this, view);
-        recentSearchesAPICall();
         setupFloatingSearch();
 
         markerOptions = new MarkerOptions();
@@ -194,8 +196,6 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-
-
     private void setupFloatingSearch() {
 
 
@@ -216,11 +216,27 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
 
                     //simulates a query call to a data source
                     //with a new query.
-                    DataHelper.findSuggestions(getActivity(), newQuery, 5,
-                            FIND_SUGGESTION_SIMULATED_DELAY, new DataHelper.OnFindSuggestionsListener() {
+                    RecentSearchesHelper.findSuggestions(getActivity(), newQuery, 5,
+                            FIND_SUGGESTION_SIMULATED_DELAY, new RecentSearchesHelper.OnFindSuggestionsListener() {
 
                                 @Override
                                 public void onResults(List<com.techease.ultimatesavings.models.recentSearches.Datum> results) {
+
+                                    //this will swap the data and
+                                    //render the collapse/expand animations as necessary
+                                    mSearchView.swapSuggestions(results);
+
+                                    //let the users know that the background
+                                    //process has completed
+                                    mSearchView.hideProgress();
+                                }
+                            });
+
+                    PopularSearchesHelper.findSuggestions(getActivity(), newQuery, 5,
+                            FIND_SUGGESTION_SIMULATED_DELAY, new PopularSearchesHelper.OnFindSuggestionsListener() {
+
+                                @Override
+                                public void onResults(List<com.techease.ultimatesavings.models.updatedPopularSearch.Datum> results) {
 
                                     //this will swap the data and
                                     //render the collapse/expand animations as necessary
@@ -241,12 +257,14 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             public void onFocus() {
 
                 //show suggestions when search bar gains focus (typically history suggestions)
-                mSearchView.swapSuggestions(DataHelper.getHistory(getActivity(), 3));
+                mSearchView.swapSuggestions(RecentSearchesHelper.getHistory(getActivity(), 3));
+                mSearchView.swapSuggestions(PopularSearchesHelper.getHistory(getActivity(), 3));
 
                 Log.d(TAG, "onFocus()");
 
                 recentSearchesAPICall();
                 setupResultsList();
+                getPopularSearches();
             }
 
             @Override
@@ -255,6 +273,8 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
                 //set the title of the bar so that when focus is returned a new query begins
                 mSearchView.setSearchBarTitle(mLastQuery);
                 recentList.clear();
+                updatedPopularList.clear();
+                tvPopularSearches.setVisibility(View.GONE);
                 //you can also set setSearchText(...) to make keep the query there when not focused and when focus returns
                 //mSearchView.setSearchText(searchSuggestion.getBody());
 
@@ -262,19 +282,25 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+
     }
 
 
     private void setupResultsList() {
-        mSearchResultsAdapter = new SearchResultsListAdapter(getActivity(), recentList);
+        mSearchResultsAdapter = new RecentSearchSuggestionAdapter(getActivity(), recentList);
+        mPopularSearchSuggestionAdapter = new PopularSearchSuggestionAdapter(getActivity(), updatedPopularList);
+        rvPopularSearches.setAdapter(mPopularSearchSuggestionAdapter);
         mSearchResultsList.setAdapter(mSearchResultsAdapter);
         mSearchResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvPopularSearches.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.HORIZONTAL, false));
 
     }
 
     private void searchStore(final String currentQuery) {
         searchedShops = new ArrayList<>();
-        filterDialog(getActivity(), currentQuery);
+        startActivity(new Intent(getActivity(), SearchActivity.class));
+        AppRepository.mEditor(getActivity()).putString("title", currentQuery).commit();
+//        filterDialog(getActivity(), currentQuery);
 
 
     }
@@ -293,16 +319,14 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mapWrapperLayout.init(googleMap, getPixelsFromDp(getActivity(), 39 + 20));
 
         this.infoWindow = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.custom_marker_info_window, null);
 
         this.ivNotaryProfile = infoWindow.findViewById(R.id.iv_profile_image);
-//        setupMap(mMap);
+
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
@@ -460,41 +484,10 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         dialog = dialogBuilder.create();
         dialog.show();
 
-        RecyclerView rvRecentSearches = dialogView.findViewById(R.id.rv_recent_searches);
-        RecyclerView rvPopularSearches = dialogView.findViewById(R.id.rv_popular_searches);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        rvRecentSearches.setLayoutManager(layoutManager);
-        rvPopularSearches.setLayoutManager(layoutManager1);
-//        recentSearchesAdapter = new RecentSearchesAdapter(recentList, getActivity());
-//        popularSearchesAdapter = new PopularSearchesAdapter(popularList, getActivity());
-//        rvPopularSearches.setAdapter(popularSearchesAdapter);
-//        rvRecentSearches.setAdapter(recentSearchesAdapter);
-        recentSearchesAPICall();
-        getPopularSearches();
         return (AlertDialog) dialog;
     }
 
-    private void recentSearchesAPICall() {
-        Call<RecentSearchResponse> recentSearchResponseCall = BaseNetworking.apiServices()
-                .recentSearched(AppRepository.mUserID(getActivity()));
-        recentSearchResponseCall.enqueue(new Callback<RecentSearchResponse>() {
-            @Override
-                public void onResponse(Call<RecentSearchResponse> call, Response<RecentSearchResponse> response) {
-                Log.d("zma id", "sho");
-                if (response.isSuccessful()) {
-                    recentList.addAll(response.body().getData());
-//                    recentSearchesAdapter.notifyDataSetChanged();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<RecentSearchResponse> call, Throwable t) {
-
-            }
-        });
-
-    }
 
     private void searchResults() {
 
@@ -507,7 +500,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
                     if (response.body().getData().size() > 0) {
                         allShops.clear();
                         searchedShops.addAll(response.body().getData());
-                        SearchedStoreListAdapter searchAdapter = new SearchedStoreListAdapter(searchedShops, getActivity());
+                        SearchedStoreListAdapter searchAdapter = new SearchedStoreListAdapter(searchedShops, getActivity(), R.layout.custom_store_layout);
                         adapter.notifyDataSetChanged();
                         rvStores.setAdapter(searchAdapter);
 
@@ -550,19 +543,44 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
-    private void getPopularSearches(){
-        Call<PopularSearchResponse> popularSearchResponseCall = BaseNetworking.apiServices().popularSearches();
-        popularSearchResponseCall.enqueue(new Callback<PopularSearchResponse>() {
+
+    private void getPopularSearches() {
+        Call<UpdatedPopularSearchResponse> popularSearchResponseCall = BaseNetworking.apiServices().updatedPopularSearch();
+        popularSearchResponseCall.enqueue(new Callback<UpdatedPopularSearchResponse>() {
             @Override
-            public void onResponse(Call<PopularSearchResponse> call, Response<PopularSearchResponse> response) {
-                if (response.isSuccessful()){
-                    popularList.addAll(response.body().getData());
-                    popularSearchesAdapter.notifyDataSetChanged();
+            public void onResponse(Call<UpdatedPopularSearchResponse> call, Response<UpdatedPopularSearchResponse> response) {
+                if (response.isSuccessful()) {
+                    updatedPopularList.addAll(response.body().getData());
+                    mPopularSearchSuggestionAdapter.notifyDataSetChanged();
+                     tvPopularSearches.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
-            public void onFailure(Call<PopularSearchResponse> call, Throwable t) {
+            public void onFailure(Call<UpdatedPopularSearchResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void recentSearchesAPICall() {
+        Call<RecentSearchesResponse> recentSearchResponseCall = BaseNetworking.apiServices()
+                .recentSearched(AppRepository.mUserID(getActivity()));
+        recentSearchResponseCall.enqueue(new Callback<RecentSearchesResponse>() {
+            @Override
+            public void onResponse(Call<RecentSearchesResponse> call, Response<RecentSearchesResponse> response) {
+                Log.d("zma id", "sho");
+                if (response.body().getSuccess()) {
+                    recentList.addAll(response.body().getData());
+                    mSearchResultsAdapter.notifyDataSetChanged();
+                }else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RecentSearchesResponse> call, Throwable t) {
 
             }
         });
