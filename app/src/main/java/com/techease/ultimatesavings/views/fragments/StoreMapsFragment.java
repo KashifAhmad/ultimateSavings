@@ -52,7 +52,6 @@ import com.techease.ultimatesavings.adapter.StoreListAdapter;
 import com.techease.ultimatesavings.models.PopularSearchesHelper;
 import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
 import com.techease.ultimatesavings.models.allShopsModel.Datum;
-import com.techease.ultimatesavings.models.popularSearches.PopularSearchResponse;
 import com.techease.ultimatesavings.models.updatedPopularSearch.UpdatedPopularSearchResponse;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
 import com.techease.ultimatesavings.models.RecentSearchesHelper;
@@ -64,12 +63,8 @@ import com.techease.ultimatesavings.utils.GPSTracker;
 import com.techease.ultimatesavings.utils.MapWrapperLayout;
 import com.techease.ultimatesavings.utils.OnInfoWindowElemTouchListener;
 import com.techease.ultimatesavings.utils.networking.BaseNetworking;
-import com.techease.ultimatesavings.views.SearchActivity;
+import com.techease.ultimatesavings.views.SecondSearchActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +91,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     @BindView(R.id.map_relative_layout)
     MapWrapperLayout mapWrapperLayout;
     @BindView(R.id.popular_searches)
-            TextView tvPopularSearches;
+    TextView tvPopularSearches;
     List<Datum> allShops;
     List<com.techease.ultimatesavings.models.searchShop.Datum> searchedShops;
     CircleImageView ivNotaryProfile;
@@ -298,7 +293,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
 
     private void searchStore(final String currentQuery) {
         searchedShops = new ArrayList<>();
-        startActivity(new Intent(getActivity(), SearchActivity.class));
+        startActivity(new Intent(getActivity(), SecondSearchActivity.class));
         AppRepository.mEditor(getActivity()).putString("title", currentQuery).commit();
 //        filterDialog(getActivity(), currentQuery);
 
@@ -318,7 +313,8 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.setMyLocationEnabled(true);
         LatLng sydney = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mapWrapperLayout.init(googleMap, getPixelsFromDp(getActivity(), 39 + 20));
@@ -424,15 +420,15 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
                         markers.add(marker);
                     }
                 } else {
-                    try {
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        String error = jObjError.getString("message");
-                        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+//                        String error = jObjError.getString("message");
+//                        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
 
@@ -486,7 +482,6 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
 
         return (AlertDialog) dialog;
     }
-
 
 
     private void searchResults() {
@@ -550,9 +545,11 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onResponse(Call<UpdatedPopularSearchResponse> call, Response<UpdatedPopularSearchResponse> response) {
                 if (response.isSuccessful()) {
-                    updatedPopularList.addAll(response.body().getData());
-                    mPopularSearchSuggestionAdapter.notifyDataSetChanged();
-                     tvPopularSearches.setVisibility(View.VISIBLE);
+                    if (response.body().getData() != null) {
+                        updatedPopularList.addAll(response.body().getData());
+                        mPopularSearchSuggestionAdapter.notifyDataSetChanged();
+                        tvPopularSearches.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -570,11 +567,12 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         recentSearchResponseCall.enqueue(new Callback<RecentSearchesResponse>() {
             @Override
             public void onResponse(Call<RecentSearchesResponse> call, Response<RecentSearchesResponse> response) {
-                Log.d("zma id", "sho");
                 if (response.body().getSuccess()) {
-                    recentList.addAll(response.body().getData());
-                    mSearchResultsAdapter.notifyDataSetChanged();
-                }else {
+                    if (response.body().getData().size() > 0) {
+                        recentList.addAll(response.body().getData());
+                        mSearchResultsAdapter.notifyDataSetChanged();
+                    }
+                } else {
 
                 }
             }

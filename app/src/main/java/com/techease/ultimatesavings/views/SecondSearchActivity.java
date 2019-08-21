@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.views.ui.searchresult.SearchFragment;
 
-public class SearchActivity extends AppCompatActivity {
+public class SecondSearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

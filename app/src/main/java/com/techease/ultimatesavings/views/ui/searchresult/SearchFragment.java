@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.google.zxing.Result;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
@@ -27,11 +30,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchFragment extends Fragment implements View.OnClickListener {
+import static android.support.constraint.Constraints.TAG;
+
+public class SearchFragment extends Fragment implements View.OnClickListener, ZXingScannerView.ResultHandler {
 
     @BindView(R.id.floating_search_view)
     FloatingSearchView mSearchView;
@@ -41,13 +47,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     MaterialSpinner mSpinnerColor;
     @BindView(R.id.btn_filter)
     Button btnFilter;
+    @BindView(R.id.iv_barcode_scan)
+    ImageView ivBarCodeScan;
     GPSTracker gpsTracker;
     private String mQueryText;
     private View view;
     private String lat, lon, size, color;
     private boolean valid = false;
     private boolean isSize = false, isColor = false;
-
+    private ZXingScannerView mScannerView;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -65,6 +73,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private void initUI() {
         ButterKnife.bind(this, view);
+        ivBarCodeScan.setOnClickListener(this);
+
+        mScannerView = new ZXingScannerView(getActivity());
+
         SmartLocation.with(getActivity()).location()
                 .start(new OnLocationUpdatedListener() {
                     @Override
@@ -118,6 +130,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this);
+    }
+
     private void setFilterData() {
         mQueryText = mSearchView.getQuery();
         AppRepository.mEditor(getActivity()).putString("title", mQueryText).commit();
@@ -135,7 +153,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                     setFilterData();
                     searchResults();
                 }
-
+                break;
+            case R.id.iv_barcode_scan:
+                mScannerView.setResultHandler(this);
+                getActivity().setContentView(mScannerView);
+                mScannerView.startCamera();
 
         }
     }
@@ -143,12 +165,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private boolean isValid() {
         mQueryText = mSearchView.getQuery();
         valid = true;
-        if (!isColor) {
-            valid = false;
-            Toast.makeText(getActivity(), "Please select a color", Toast.LENGTH_SHORT).show();
-        } else {
-
-        }
+//        if (!isColor) {
+//            valid = false;
+//            Toast.makeText(getActivity(), "Please select a color", Toast.LENGTH_SHORT).show();
+//        } else {
+//
+//        }
         if (!isSize) {
             valid = false;
             Toast.makeText(getActivity(), "Please select a size", Toast.LENGTH_SHORT).show();
@@ -158,7 +180,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private void searchResults() {
 
-        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, mQueryText, size, color, AppRepository.mUserID(getActivity()));
+        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, mQueryText, size, "RED", AppRepository.mUserID(getActivity()));
         searchShops.enqueue(new Callback<SearchShop>() {
             @Override
             public void onResponse(Call<SearchShop> call, Response<SearchShop> response) {
@@ -178,5 +200,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             public void onFailure(Call<SearchShop> call, Throwable t) {
             }
         });
+    }
+
+    @Override
+    public void handleResult(Result rawResult) {
+        Log.v("zma scan result", rawResult.getText()); // Prints scan results
+        Log.v("zma scan result 2", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+
+        // If you would like to resume scanning, call this method below:
+        mScannerView.resumeCameraPreview(this);
     }
 }

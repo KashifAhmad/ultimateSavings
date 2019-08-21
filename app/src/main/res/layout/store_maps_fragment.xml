@@ -70,7 +70,7 @@
             app:floatingSearch_leftActionMode="showHamburger"
             app:floatingSearch_menu="@menu/search_menu"
             app:floatingSearch_menuItemIconColor="@color/colorWhite"
-            app:floatingSearch_searchHint="search for grocery item or brand"
+            app:floatingSearch_searchHint="Enter Product name"
             app:floatingSearch_searchInputTextSize="8sp"
             app:floatingSearch_showSearchKey="true"
 

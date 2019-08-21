@@ -48,6 +48,7 @@ public class SearchedStoreListAdapter extends RecyclerView.Adapter<SearchedStore
         holder.tvStoreName.setText(allStoreModel.getShopTitle());
         holder.tvStoreDistance.setText(allStoreModel.getDistance()+" away");
         Picasso.get().load(allStoreModel.getPicture()).into(holder.ivStoreImage);
+        holder.tvItemPrice.setText("$"+allStoreModel.getPrice());
 
 
 
@@ -61,7 +62,7 @@ public class SearchedStoreListAdapter extends RecyclerView.Adapter<SearchedStore
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivStoreImage;
-        TextView tvStoreName, tvStoreDistance;
+        TextView tvStoreName, tvStoreDistance, tvItemPrice;
         CardView cvStore;
         ProgressBar progressBar;
         MyViewHolder(View view) {
@@ -69,6 +70,7 @@ public class SearchedStoreListAdapter extends RecyclerView.Adapter<SearchedStore
             ivStoreImage = view.findViewById(R.id.iv_store);
             tvStoreName = view.findViewById(R.id.tv_store_name);
             tvStoreDistance = view.findViewById(R.id.tv_store_distance);
+            tvItemPrice = view.findViewById(R.id.tv_item_price);
 
 
 

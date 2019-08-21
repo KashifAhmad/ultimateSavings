@@ -35,7 +35,7 @@ import com.techease.ultimatesavings.models.searchShop.SearchShop;
 import com.techease.ultimatesavings.utils.AppRepository;
 import com.techease.ultimatesavings.utils.DialogBuilder;
 import com.techease.ultimatesavings.utils.networking.BaseNetworking;
-import com.techease.ultimatesavings.views.SearchActivity;
+import com.techease.ultimatesavings.views.SecondSearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,13 +93,13 @@ public class RecentSearchSuggestionAdapter extends RecyclerView.Adapter<RecentSe
         holder.mSearchedItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchResults(searchedData.getLat(), searchedData.getLng(), searchedData.getSearchQuery(),
-                        searchedData.getSize(), searchedData.getColor());
+//                searchResults(searchedData.getLat(), searchedData.getLng(), searchedData.getSearchQuery(),
+//                        searchedData.getSize(), searchedData.getColor());
                 AppRepository.mEditor(mContext).putString("title", searchedData.getSearchQuery()).commit();
                 AppRepository.mEditor(mContext).putString("size", searchedData.getSize()).commit();
                 AppRepository.mEditor(mContext).putString("color", searchedData.getColor()).commit();
 
-                mContext.startActivity(new Intent(mContext, SearchActivity.class));
+                mContext.startActivity(new Intent(mContext, SecondSearchActivity.class));
 
 
             }
