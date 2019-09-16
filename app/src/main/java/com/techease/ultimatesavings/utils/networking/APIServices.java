@@ -1,8 +1,10 @@
 package com.techease.ultimatesavings.utils.networking;
 
+import com.techease.ultimatesavings.models.addToCart.AddToCartResponse;
 import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
 import com.techease.ultimatesavings.models.changePasswordModel.ChangePasswordModel;
 import com.techease.ultimatesavings.models.filteredShops.FilteredShopsModel;
+import com.techease.ultimatesavings.models.getCartItems.GetCartResponse;
 import com.techease.ultimatesavings.models.popularSearches.PopularSearchResponse;
 import com.techease.ultimatesavings.models.recentSearches.RecentSearchesResponse;
 import com.techease.ultimatesavings.models.updatedPopularSearch.UpdatedPopularSearchResponse;
@@ -77,6 +79,18 @@ public interface APIServices {
 
     @GET("app/popularSearches")
     Call<UpdatedPopularSearchResponse> updatedPopularSearch();
+
+    @FormUrlEncoded
+    @POST("app/addtocart")
+    Call<AddToCartResponse> cartAddition(@Field("user_id") int id,
+                                         @Field("product_id") String proID,
+                                         @Field("price") String price,
+                                         @Field("quantity") int quantity);
+    @FormUrlEncoded
+    @POST("app/getCartData")
+    Call<GetCartResponse> getCart(@Field("user_id") int id,
+                                  @Field("lat") String lat,
+                                  @Field("lng") String lon);
 
 }
 

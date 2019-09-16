@@ -19,7 +19,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="0.2"
             android:padding="5dp"
-            android:src="@drawable/ic_arrow_white_black_24dp" />
+            app:srcCompat="@drawable/ic_arrow_white_black_24dp" />
 
         <com.arlib.floatingsearchview.FloatingSearchView
             android:id="@+id/floating_search_view"
@@ -58,5 +58,20 @@
         android:layout_below="@id/ll_search"
         android:layout_margin="5dp"
         tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btn_done"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/text_size"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/round_button_purple"
+        android:text="Done"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="17sp" />
 
 </RelativeLayout>

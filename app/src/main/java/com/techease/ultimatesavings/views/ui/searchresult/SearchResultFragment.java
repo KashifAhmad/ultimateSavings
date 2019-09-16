@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.techease.ultimatesavings.utils.AppRepository;
 import com.techease.ultimatesavings.utils.GPSTracker;
 import com.techease.ultimatesavings.utils.ViewChanger;
 import com.techease.ultimatesavings.utils.networking.BaseNetworking;
+import com.techease.ultimatesavings.views.CheckOutActivity;
 import com.techease.ultimatesavings.views.ui.BottomNavigationActivity;
 
 import java.util.ArrayList;
@@ -44,6 +46,8 @@ public class SearchResultFragment extends Fragment implements View.OnClickListen
     SearchedStoreListAdapter adapter;
     @BindView(R.id.floating_search_view)
     FloatingSearchView mSearchView;
+    @BindView(R.id.btn_done)
+    Button btnDone;
     @BindView(R.id.iv_map)
     ImageView ivMap;
     @BindView(R.id.iv_back)
@@ -70,6 +74,7 @@ public class SearchResultFragment extends Fragment implements View.OnClickListen
         ButterKnife.bind(this, view);
         ivMap.setOnClickListener(this);
         ivBack.setOnClickListener(this);
+        btnDone.setOnClickListener(this);
         mQueryText = AppRepository.mSharedPref(getActivity()).getString("title", "");
         size = AppRepository.mSharedPref(getActivity()).getString("size", "");
         color = AppRepository.mSharedPref(getActivity()).getString("color", "");
@@ -128,6 +133,9 @@ public class SearchResultFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.iv_back:
                 getActivity().onBackPressed();
+                break;
+            case R.id.btn_done:
+                startActivity(new Intent(getActivity(), CheckOutActivity.class));
 
         }
 

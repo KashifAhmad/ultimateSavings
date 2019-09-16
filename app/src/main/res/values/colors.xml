@@ -6,4 +6,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorLightBlack">#8A8A8A</color>
     <color name="colorLightWhite">#FAFAFA</color>
+    <color name="cart_button">#00b67c</color>
 </resources>
