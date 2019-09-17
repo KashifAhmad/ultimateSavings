@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 import android.widget.Toast;
 
+import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.models.loginModels.LoginModel;
 import com.techease.ultimatesavings.models.loginModels.LoginUserInput;
 import com.techease.ultimatesavings.utils.AppRepository;
+import com.techease.ultimatesavings.utils.Configuation;
 import com.techease.ultimatesavings.utils.DialogBuilder;
 import com.techease.ultimatesavings.utils.networking.BaseNetworking;
 import com.techease.ultimatesavings.views.EmailVerificationActivity;
@@ -36,7 +38,7 @@ public class LoginViewModel extends BaseObservable {
             DialogBuilder.dialogBuilder(mContext, "");
             onLogin();
         } else {
-            Toast.makeText(mContext, "Input validation failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.validation_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -60,8 +62,8 @@ public class LoginViewModel extends BaseObservable {
                 DialogBuilder.dialog.dismiss();
                 if (response.body().getSuccess()) {
                     mContext.startActivity(new Intent(mContext, BottomNavigationActivity.class));
-                    AppRepository.mEditor(mContext).putBoolean("loggedIn", true).commit();
-                    AppRepository.mEditor(mContext).putInt("userID", response.body().getUser().getUserId()).commit();
+                    AppRepository.mEditor(mContext).putBoolean(Configuation.LOGIN, true).commit();
+                    AppRepository.mEditor(mContext).putInt(Configuation.USERID, response.body().getUser().getUserId()).commit();
                 } else {
                     Toast.makeText(mContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }

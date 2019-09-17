@@ -30,4 +30,6 @@
     <string name="email_id">Email ID</string>
     <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
     <string name="skip">Skip</string>
+    <string name="validation_failed">Input validation failed</string>
+
 </resources>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.BaseObservable;
 
 import com.techease.ultimatesavings.utils.AppRepository;
+import com.techease.ultimatesavings.views.MyOrdersActivity;
 import com.techease.ultimatesavings.views.SplashActivity;
 
 public class SettingsViewModel extends BaseObservable {
@@ -17,6 +18,9 @@ public class SettingsViewModel extends BaseObservable {
         AppRepository.mEditor(mContext).putBoolean("loggedIn", false).commit();
         mContext.startActivity(new Intent(mContext, SplashActivity.class));
 
+    }
+    public void mOrders(){
+        mContext.startActivity(new Intent(mContext, MyOrdersActivity.class));
     }
     // TODO: Implement the ViewModel
 }

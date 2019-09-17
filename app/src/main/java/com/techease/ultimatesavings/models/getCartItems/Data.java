@@ -12,6 +12,17 @@ public class Data {
     @SerializedName("total_amount")
     private String mTotalAmount;
 
+    public String getmCartID() {
+        return mCartID;
+    }
+
+    public void setmCartID(String mCartID) {
+        this.mCartID = mCartID;
+    }
+
+    @SerializedName("main_cart_id")
+    private String mCartID;
+
     public List<CartDatum> getCartData() {
         return mCartData;
     }

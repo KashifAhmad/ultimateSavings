@@ -10,7 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".views.CheckOutActivity"></activity>
+        <activity android:name=".views.MyOrdersActivity"></activity>
+        <activity android:name=".views.ProfileActivity" />
+        <activity android:name=".views.CheckOutActivity" />
         <activity android:name=".views.ui.CardAdditionActivity" />
         <activity android:name=".views.SearchResultActivity" />
         <activity android:name=".views.SecondSearchActivity" />
@@ -61,12 +63,12 @@
     </application>
 
     <uses-feature android:name="android.hardware.location.gps" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="com.javapapers.currentlocationinmap.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
