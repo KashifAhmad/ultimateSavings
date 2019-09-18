@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.utils.ViewChanger;
 import com.techease.ultimatesavings.views.fragments.StoreMapsFragment;
+import com.techease.ultimatesavings.views.ui.profile.ProfileFragment;
 import com.techease.ultimatesavings.views.ui.settings.SettingsFragment;
 
 import butterknife.BindView;
@@ -30,6 +31,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
 
                     return true;
                 case R.id.navigation_home:
+                    //test drag listener
+                    ViewChanger.fragmentChanger(BottomNavigationActivity.this, new ProfileFragment(), R.id.container);
 
                     return true;
                 case R.id.navigation_dashboard:

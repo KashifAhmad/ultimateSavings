@@ -17,5 +17,6 @@ public class MyOrdersActivity extends AppCompatActivity {
                     .replace(R.id.container, MyOrdersFragment.newInstance())
                     .commitNow();
         }
+        getSupportActionBar().hide();
     }
 }

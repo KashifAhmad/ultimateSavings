@@ -11,21 +11,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
 import com.techease.ultimatesavings.R;
-import com.techease.ultimatesavings.models.addToCart.AddToCartResponse;
 import com.techease.ultimatesavings.models.myOrders.CartDatum;
-import com.techease.ultimatesavings.utils.AppRepository;
-import com.techease.ultimatesavings.utils.networking.BaseNetworking;
 
 import java.util.HashMap;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by kashif on 4/9/19.
@@ -56,9 +47,9 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final CartDatum allStoreModel = allPropertiesDataList.get(position);
-        holder.tvStoreName.setText(allStoreModel.getOrderDate().get(position).getItemName());
-        holder.tvStoreDistance.setText(allStoreModel.getOrderDate().get(position).getQuantity());
-        holder.tvItemPrice.setText("$"+allStoreModel.getOrderDate().get(position).getPrice());
+        holder.tvStoreName.setText(allStoreModel.getItemName());
+        holder.tvStoreDistance.setText("Quantity "+allStoreModel.getQuantity());
+        holder.tvItemPrice.setText("$"+allStoreModel.getPrice());
 
 
     }
@@ -82,7 +73,6 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.MyView
             tvStoreName = view.findViewById(R.id.tv_store_name);
             tvStoreDistance = view.findViewById(R.id.tv_store_distance);
             tvItemPrice = view.findViewById(R.id.tv_item_price);
-            ibCart = view.findViewById(R.id.ib_cart);
 
 
 

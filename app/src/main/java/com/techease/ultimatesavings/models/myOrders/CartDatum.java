@@ -1,32 +1,40 @@
 
 package com.techease.ultimatesavings.models.myOrders;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
-
 
 @SuppressWarnings("unused")
 public class CartDatum {
 
-    @SerializedName("cart_id")
-    private String mCartId;
-    @SerializedName("order_date")
-    private List<OrderDate> mOrderDate;
+    @SerializedName("item_name")
+    private String mItemName;
+    @SerializedName("price")
+    private String mPrice;
+    @SerializedName("quantity")
+    private String mQuantity;
 
-    public String getCartId() {
-        return mCartId;
+    public String getItemName() {
+        return mItemName;
     }
 
-    public void setCartId(String cartId) {
-        mCartId = cartId;
+    public void setItemName(String itemName) {
+        mItemName = itemName;
     }
 
-    public List<OrderDate> getOrderDate() {
-        return mOrderDate;
+    public String getPrice() {
+        return mPrice;
     }
 
-    public void setOrderDate(List<OrderDate> orderDate) {
-        mOrderDate = orderDate;
+    public void setPrice(String price) {
+        mPrice = price;
+    }
+
+    public String getQuantity() {
+        return mQuantity;
+    }
+
+    public void setQuantity(String quantity) {
+        mQuantity = quantity;
     }
 
 }
