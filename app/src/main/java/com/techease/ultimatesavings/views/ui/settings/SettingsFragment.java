@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.utils.AppRepository;
@@ -31,6 +32,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     Button btnLogout;
     @BindView(R.id.ll_my_orders)
     LinearLayout llOrders;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_email)
+    TextView tvEmail;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -52,6 +58,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, view);
         btnLogout.setOnClickListener(this);
         llOrders.setOnClickListener(this);
+        tvName.setText(AppRepository.mSharedPref(getActivity()).getString("name", ""));
+        tvEmail.setText(AppRepository.mSharedPref(getActivity()).getString("email", ""));
 
     }
 

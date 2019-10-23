@@ -486,7 +486,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
 
     private void searchResults() {
 
-        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, title, size, color, AppRepository.mUserID(getActivity()));
+        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, title, color, AppRepository.mUserID(getActivity()));
         searchShops.enqueue(new Callback<SearchShop>() {
             @Override
             public void onResponse(Call<SearchShop> call, Response<SearchShop> response) {

@@ -147,7 +147,7 @@ public class PopularSearchSuggestionAdapter extends RecyclerView.Adapter<Popular
 
     private void searchResults(String lat, String lon, String title, String size, String color) {
 
-        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, title, size, color, AppRepository.mUserID(mContext));
+        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, title, color, AppRepository.mUserID(mContext));
         searchShops.enqueue(new Callback<SearchShop>() {
             @Override
             public void onResponse(Call<SearchShop> call, Response<SearchShop> response) {

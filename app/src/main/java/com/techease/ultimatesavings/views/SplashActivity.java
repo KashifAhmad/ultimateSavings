@@ -23,12 +23,12 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(new Intent(SplashActivity.this, BottomNavigationActivity.class));
                     finish();
                 } else {
-                    startActivity(new Intent(SplashActivity.this, LoginRegisterActivity.class));
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 }
 
             }
-        }, 1000);
+        }, 2000);
     }
 
     @Override

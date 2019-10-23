@@ -54,13 +54,14 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_address"
+                        android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Name"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tv_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Address"

@@ -69,7 +69,6 @@ public interface APIServices {
     Call<SearchShop> searchShop(@Field("lat") String lat,
                                 @Field("lng") String lng,
                                 @Field("title") String title,
-                                @Field("size") String size,
                                 @Field("color") String color,
                                 @Field("userid") int userId);
     @FormUrlEncoded

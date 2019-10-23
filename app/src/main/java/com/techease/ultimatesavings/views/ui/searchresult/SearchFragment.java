@@ -54,7 +54,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, ZX
     private View view;
     private String lat, lon, size, color;
     private boolean valid = false;
-    private boolean isSize = false, isColor = false;
+    private boolean isSize = true, isColor = false;
     private ZXingScannerView mScannerView;
 
     public static SearchFragment newInstance() {
@@ -107,6 +107,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, ZX
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 size = item.toString();
+                size = "S";
                 isSize = true;
             }
         });
@@ -180,7 +181,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener, ZX
 
     private void searchResults() {
 
-        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, mQueryText, size, "RED", AppRepository.mUserID(getActivity()));
+        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, mQueryText, "RED", AppRepository.mUserID(getActivity()));
         searchShops.enqueue(new Callback<SearchShop>() {
             @Override
             public void onResponse(Call<SearchShop> call, Response<SearchShop> response) {

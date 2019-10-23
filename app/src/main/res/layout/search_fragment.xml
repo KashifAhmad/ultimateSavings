@@ -17,8 +17,8 @@
             <com.arlib.floatingsearchview.FloatingSearchView
                 android:id="@+id/floating_search_view"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="60dp"
+                android:layout_weight="1"
                 app:floatingSearch_backgroundColor="@color/colorPrimary"
                 app:floatingSearch_close_search_on_keyboard_dismiss="false"
                 app:floatingSearch_dimBackground="false"
@@ -34,13 +34,14 @@
                 app:floatingSearch_suggestionRightIconColor="@color/colorWhite"
                 app:floatingSearch_suggestionsListAnimDuration="250"
                 app:floatingSearch_viewTextColor="@color/colorWhite" />
+
             <ImageView
                 android:id="@+id/iv_barcode_scan"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="0.2"
                 android:padding="15dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/barcode"/>
+                android:src="@drawable/barcode" />
         </LinearLayout>
 
         <LinearLayout
@@ -48,11 +49,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="@dimen/text_size">
+
             <CheckBox
                 android:id="@+id/checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Use My Current Location"
+                android:textColor="@color/colorPrimary" />
+
+            <CheckBox
+                android:id="@+id/check_lowest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Find the lowest price"
                 android:textColor="@color/colorPrimary" />
 
             <TextView
@@ -62,15 +71,17 @@
                 android:layout_marginTop="@dimen/text_size"
                 android:layout_marginBottom="10dp"
                 android:text="Size"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone" />
 
 
             <LinearLayout
                 android:id="@+id/ll_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/rectangle_borders"
 
-                android:background="@drawable/rectangle_borders">
+                android:visibility="gone">
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_size"
@@ -89,15 +100,15 @@
                 android:layout_marginTop="@dimen/text_size"
                 android:layout_marginBottom="10dp"
                 android:text="Color"
-                android:visibility="gone"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/ll_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-android:visibility="gone"
-                android:background="@drawable/rectangle_borders">
+                android:background="@drawable/rectangle_borders"
+                android:visibility="gone">
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_color"
@@ -106,7 +117,6 @@ android:visibility="gone"
                     android:layout_margin="4dp"
                     app:ms_hint_color="@color/colorPrimary" />
             </LinearLayout>
-
 
 
             <Button
