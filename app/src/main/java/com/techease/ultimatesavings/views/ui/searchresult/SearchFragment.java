@@ -205,10 +205,35 @@ public class SearchFragment extends Fragment implements View.OnClickListener, ZX
 
     @Override
     public void handleResult(Result rawResult) {
-        Log.v("zma scan result", rawResult.getText()); // Prints scan results
-        Log.v("zma scan result 2", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+        Log.d("zma scan result", rawResult.getText()); // Prints scan results
+        Log.d("zma scan result 2", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
 
+        Toast.makeText(getActivity(), rawResult.getText(), Toast.LENGTH_SHORT).show();
         // If you would like to resume scanning, call this method below:
+        scanBarCode(rawResult.getText());
         mScannerView.resumeCameraPreview(this);
+    }
+    private void scanBarCode(String scanProduct) {
+
+        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, scanProduct, "RED", AppRepository.mUserID(getActivity()));
+        searchShops.enqueue(new Callback<SearchShop>() {
+            @Override
+            public void onResponse(Call<SearchShop> call, Response<SearchShop> response) {
+                if (response.body().getSuccess()) {
+                    if (response.body().getData().size() > 0) {
+                        startActivity(new Intent(getActivity(), SearchResultActivity.class));
+                    }
+                } else {
+
+                    Toast.makeText(getActivity(), "No shops found", Toast.LENGTH_SHORT).show();
+//
+                }
+//                mQueryText = "";
+            }
+
+            @Override
+            public void onFailure(Call<SearchShop> call, Throwable t) {
+            }
+        });
     }
 }

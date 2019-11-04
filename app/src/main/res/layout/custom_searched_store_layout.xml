@@ -74,6 +74,7 @@
               android:id="@+id/ib_cart"
               android:layout_width="80dp"
               android:layout_height="30dp"
+              android:visibility="gone"
               android:background="@drawable/round_button_purple"
               android:padding="10dp"
               android:layout_gravity="center_horizontal"

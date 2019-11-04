@@ -22,15 +22,13 @@ import com.techease.ultimatesavings.models.searchShop.Datum;
 import com.techease.ultimatesavings.models.searchShop.SearchShop;
 import com.techease.ultimatesavings.utils.AppRepository;
 import com.techease.ultimatesavings.utils.GPSTracker;
-import com.techease.ultimatesavings.utils.ViewChanger;
 import com.techease.ultimatesavings.utils.networking.BaseNetworking;
-import com.techease.ultimatesavings.views.CheckOutActivity;
 import com.techease.ultimatesavings.views.ui.BottomNavigationActivity;
+import com.techease.ultimatesavings.views.ui.StoreLocationMapsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
@@ -52,7 +50,7 @@ public class SearchResultFragment extends Fragment implements View.OnClickListen
     ImageView ivMap;
     @BindView(R.id.iv_back)
     ImageView ivBack;
-    private String lat, lon, size, color, mQueryText;
+    private String lat, lon, size, color, mQueryText, picture;
     private View view;
     private GPSTracker gpsTracker;
 
@@ -109,6 +107,9 @@ public class SearchResultFragment extends Fragment implements View.OnClickListen
                 if (response.body().getSuccess()) {
                     if (response.body().getData().size() > 0) {
                         searchList.addAll(response.body().getData());
+                        lat = response.body().getData().get(0).getLatitude();
+                        lon = response.body().getData().get(0).getLongitude();
+                        picture = response.body().getData().get(0).getPicture();
                         adapter.notifyDataSetChanged();
                     }
                 } else {
@@ -135,7 +136,16 @@ public class SearchResultFragment extends Fragment implements View.OnClickListen
                 getActivity().onBackPressed();
                 break;
             case R.id.btn_done:
-                startActivity(new Intent(getActivity(), CheckOutActivity.class));
+                Bundle args = new Bundle();
+                args.putString("lat", lat);
+                args.putString("lng", lon);
+//                args.putString("name", allStoreModel.getTitle());
+                args.putString("image",picture);
+//                args.putString("distance", allStoreModel.getDistance());
+                Fragment fragment = new StoreLocationMapsFragment();
+                fragment.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+
 
         }
 

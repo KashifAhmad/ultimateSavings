@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         tools:context="com.techease.ultimatesavings.views.ui.StoreMapsActivity">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,49 +35,37 @@
                 android:visibility="gone"
                 android:text="Popular Searches"
                 android:textColor="@color/colorPrimary"
-               />
+                />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_popular_searches"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/popular_searches"
-                 />
+                />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <com.arlib.floatingsearchview.FloatingSearchView
-                android:id="@+id/floating_search_view"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                app:floatingSearch_backgroundColor="@color/colorPrimary"
-                app:floatingSearch_close_search_on_keyboard_dismiss="false"
-                app:floatingSearch_dimBackground="false"
-                app:floatingSearch_dismissOnOutsideTouch="true"
-                app:floatingSearch_hintTextColor="@color/colorWhite"
-                app:floatingSearch_leftActionColor="@color/colorWhite"
-                app:floatingSearch_leftActionMode="showHamburger"
-                app:floatingSearch_menu="@menu/search_menu"
-                app:floatingSearch_menuItemIconColor="@color/colorWhite"
-                app:floatingSearch_searchHint="Enter Product name"
-                app:floatingSearch_searchInputTextSize="8sp"
-                app:floatingSearch_showSearchKey="true"
-                app:floatingSearch_suggestionRightIconColor="@color/colorWhite"
-                app:floatingSearch_suggestionsListAnimDuration="250"
-                app:floatingSearch_viewTextColor="@color/colorWhite" />
+        <com.arlib.floatingsearchview.FloatingSearchView
+            android:id="@+id/floating_search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            app:floatingSearch_backgroundColor="@color/colorPrimary"
+            app:floatingSearch_close_search_on_keyboard_dismiss="false"
+            app:floatingSearch_dimBackground="false"
+            app:floatingSearch_dismissOnOutsideTouch="true"
+            app:floatingSearch_hintTextColor="@color/colorWhite"
+            app:floatingSearch_leftActionColor="@color/colorWhite"
+            app:floatingSearch_leftActionMode="showHamburger"
+            app:floatingSearch_menu="@menu/search_menu"
+            app:floatingSearch_menuItemIconColor="@color/colorWhite"
+            app:floatingSearch_searchHint="Enter Product name"
+            app:floatingSearch_searchInputTextSize="8sp"
+            app:floatingSearch_showSearchKey="true"
 
-            <ImageView
-                android:id="@+id/iv_barcode_scan"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:padding="15dp"
-                android:src="@drawable/barcode" />
-        </LinearLayout>
+            app:floatingSearch_suggestionRightIconColor="@color/colorWhite"
+            app:floatingSearch_suggestionsListAnimDuration="250"
+            app:floatingSearch_viewTextColor="@color/colorWhite" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,15 +74,15 @@
             android:src="@mipmap/cart"
             android:visibility="gone" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_stores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dp" />
 
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_stores"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="60dp" />
 
 </FrameLayout>

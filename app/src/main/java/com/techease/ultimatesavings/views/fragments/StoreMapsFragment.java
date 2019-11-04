@@ -29,20 +29,18 @@ import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.zxing.Result;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.squareup.picasso.Picasso;
 import com.techease.ultimatesavings.R;
 import com.techease.ultimatesavings.adapter.PopularSearchSuggestionAdapter;
 import com.techease.ultimatesavings.adapter.PopularSearchesAdapter;
@@ -50,19 +48,19 @@ import com.techease.ultimatesavings.adapter.RecentSearchSuggestionAdapter;
 import com.techease.ultimatesavings.adapter.SearchedStoreListAdapter;
 import com.techease.ultimatesavings.adapter.StoreListAdapter;
 import com.techease.ultimatesavings.models.PopularSearchesHelper;
+import com.techease.ultimatesavings.models.RecentSearchesHelper;
 import com.techease.ultimatesavings.models.allShopsModel.AllShopsModel;
 import com.techease.ultimatesavings.models.allShopsModel.Datum;
-import com.techease.ultimatesavings.models.updatedPopularSearch.UpdatedPopularSearchResponse;
-import com.techease.ultimatesavings.models.searchShop.SearchShop;
-import com.techease.ultimatesavings.models.RecentSearchesHelper;
 import com.techease.ultimatesavings.models.recentSearches.RecentSearchesResponse;
+import com.techease.ultimatesavings.models.searchShop.SearchShop;
+import com.techease.ultimatesavings.models.updatedPopularSearch.UpdatedPopularSearchResponse;
 import com.techease.ultimatesavings.utils.AppRepository;
 import com.techease.ultimatesavings.utils.Connectivity;
 import com.techease.ultimatesavings.utils.DialogBuilder;
 import com.techease.ultimatesavings.utils.GPSTracker;
-import com.techease.ultimatesavings.utils.MapWrapperLayout;
 import com.techease.ultimatesavings.utils.OnInfoWindowElemTouchListener;
 import com.techease.ultimatesavings.utils.networking.BaseNetworking;
+import com.techease.ultimatesavings.views.SearchResultActivity;
 import com.techease.ultimatesavings.views.SecondSearchActivity;
 
 import java.util.ArrayList;
@@ -73,11 +71,12 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
+public class StoreMapsFragment extends Fragment implements ZXingScannerView.ResultHandler, View.OnClickListener {
     public static final long FIND_SUGGESTION_SIMULATED_DELAY = 250;
     private final String TAG = "BlankFragment";
     @BindView(R.id.floating_search_view)
@@ -88,10 +87,10 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     RecyclerView mSearchResultsList;
     @BindView(R.id.rv_popular_searches)
     RecyclerView rvPopularSearches;
-    @BindView(R.id.map_relative_layout)
-    MapWrapperLayout mapWrapperLayout;
     @BindView(R.id.popular_searches)
     TextView tvPopularSearches;
+    @BindView(R.id.iv_barcode_scan)
+    ImageView ivBarCodeScan;
     List<Datum> allShops;
     List<com.techease.ultimatesavings.models.searchShop.Datum> searchedShops;
     CircleImageView ivNotaryProfile;
@@ -111,6 +110,8 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
     private Dialog dialog;
     private RecentSearchSuggestionAdapter mSearchResultsAdapter;
     private PopularSearchSuggestionAdapter mPopularSearchSuggestionAdapter;
+    private ZXingScannerView mScannerView;
+
 
     private String mLastQuery = "";
 
@@ -134,12 +135,14 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
 
     private void initUI() {
         ButterKnife.bind(this, view);
+        ivBarCodeScan.setOnClickListener(this);
+        mScannerView = new ZXingScannerView(getActivity());
         setupFloatingSearch();
 
         markerOptions = new MarkerOptions();
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+//        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
         gpsTracker = new GPSTracker(getActivity());
 
         SmartLocation.with(getActivity()).location()
@@ -161,6 +164,8 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+//        rvPopularSearches.bringToFront();
+//        mSearchResultsList.bringToFront();
 
 
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
@@ -173,7 +178,6 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             public void onSearchAction(String currentQuery) {
                 if (Connectivity.isConnected(getActivity())) {
                     title = currentQuery;
-
                     searchStore(currentQuery);
 
                 } else {
@@ -260,6 +264,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
                 recentSearchesAPICall();
                 setupResultsList();
                 getPopularSearches();
+                rvStores.setVisibility(View.GONE);
             }
 
             @Override
@@ -270,6 +275,7 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
                 recentList.clear();
                 updatedPopularList.clear();
                 tvPopularSearches.setVisibility(View.GONE);
+                rvStores.setVisibility(View.VISIBLE);
                 //you can also set setSearchText(...) to make keep the query there when not focused and when focus returns
                 //mSearchView.setSearchText(searchSuggestion.getBody());
 
@@ -305,60 +311,12 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
         markers = new ArrayList<>();
         adapter = new StoreListAdapter(allShops, getActivity());
         LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                = new LinearLayoutManager(getActivity());
+        initData();
         rvStores.setLayoutManager(layoutManager);
         rvStores.setAdapter(adapter);
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.getUiSettings().setCompassEnabled(true);
-        mMap.setMyLocationEnabled(true);
-        LatLng sydney = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mapWrapperLayout.init(googleMap, getPixelsFromDp(getActivity(), 39 + 20));
-
-        this.infoWindow = (ViewGroup) getActivity().getLayoutInflater().inflate(R.layout.custom_marker_info_window, null);
-
-        this.ivNotaryProfile = infoWindow.findViewById(R.id.iv_profile_image);
-
-        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                // Setting up the infoWindow with current's marker info
-                if (isSearch) {
-                    com.techease.ultimatesavings.models.searchShop.Datum mModel = (com.techease.ultimatesavings.models.searchShop.Datum) marker.getTag();
-                    Picasso.get().load(mModel.getPicture()).into(ivNotaryProfile);
-                    isSearch = false;
-                } else {
-                    Datum model = (Datum) marker.getTag();
-
-                    Picasso.get().load(model.getPicture()).into(ivNotaryProfile);
-                }
-
-                // We must call this to set the current marker and infoWindow references
-                // to the MapWrapperLayout
-                mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
-                return infoWindow;
-            }
-        });
-
-//        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                marker.showInfoWindow();
-//                return false;
-//            }
-//        });
-        initData();
-
-    }
 
     private void checkPermissions() {
         Dexter.withActivity(getActivity())
@@ -376,6 +334,18 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
         }).check();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     protected void setupMap(GoogleMap mMap) {
@@ -409,16 +379,16 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
                 if (response.body().getSuccess()) {
                     allShops.addAll(response.body().getData());
                     adapter.notifyDataSetChanged();
-                    for (int i = 0; i < allShops.size(); i++) {
-                        Marker marker = mMap.addMarker(markerOptions.position(new LatLng(Double.parseDouble(allShops.get(i).getLatitude()),
-                                Double.parseDouble(allShops.get(i).getLongitude()))).
-                                icon(BitmapDescriptorFactory.fromResource(R.mipmap.location)).
-                                snippet(allShops.get(i).getDistance() + " KM's away"));
-                        marker.setTag(allShops.get(i));
-                        marker.showInfoWindow();
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 10));
-                        markers.add(marker);
-                    }
+//                    for (int i = 0; i < allShops.size(); i++) {
+//                        Marker marker = mMap.addMarker(markerOptions.position(new LatLng(Double.parseDouble(allShops.get(i).getLatitude()),
+//                                Double.parseDouble(allShops.get(i).getLongitude()))).
+//                                icon(BitmapDescriptorFactory.fromResource(R.mipmap.location)).
+//                                snippet(allShops.get(i).getDistance() + " KM's away"));
+//                        marker.setTag(allShops.get(i));
+//                        marker.showInfoWindow();
+//                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 10));
+//                        markers.add(marker);
+//                    }
                 } else {
 //                    try {
 //                        JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -583,5 +553,46 @@ public class StoreMapsFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+    }
+
+    @Override
+    public void handleResult(Result rawResult) {
+        scanBarCode(rawResult.getText());
+
+    }
+
+    private void scanBarCode(String scanProduct) {
+
+        Call<SearchShop> searchShops = BaseNetworking.apiServices().searchShop(lat, lon, scanProduct, "RED", AppRepository.mUserID(getActivity()));
+        searchShops.enqueue(new Callback<SearchShop>() {
+            @Override
+            public void onResponse(Call<SearchShop> call, Response<SearchShop> response) {
+                if (response.body().getSuccess()) {
+                    if (response.body().getData().size() > 0) {
+                        startActivity(new Intent(getActivity(), SearchResultActivity.class));
+                    }
+                } else {
+
+                    Toast.makeText(getActivity(), "No shops found", Toast.LENGTH_SHORT).show();
+//
+                }
+//                mQueryText = "";
+            }
+
+            @Override
+            public void onFailure(Call<SearchShop> call, Throwable t) {
+            }
+        });
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_barcode_scan:
+                mScannerView.setResultHandler(this);
+                getActivity().setContentView(mScannerView);
+                mScannerView.startCamera();
+        }
     }
 }
